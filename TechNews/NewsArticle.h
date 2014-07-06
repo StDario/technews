@@ -17,4 +17,6 @@
 @property (nonatomic, strong) NSString *imageUrl;
 @property (nonatomic, strong) NSString *sourceName;
 
+-(void)initWithDictionary:(NSDictionary *)dict;
+
 @end

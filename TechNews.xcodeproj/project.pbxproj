@@ -24,6 +24,7 @@
 		BE7F4DDF1969C42B007DDDF3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BE7F4DDD1969C42B007DDDF3 /* InfoPlist.strings */; };
 		BE7F4DE11969C42B007DDDF3 /* TechNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DE01969C42B007DDDF3 /* TechNewsTests.m */; };
 		BE7F4DEE1969D10A007DDDF3 /* NewsArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DED1969D10A007DDDF3 /* NewsArticle.m */; };
+		BE7F4DF21969D44A007DDDF3 /* DownloadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */; };
 		E3F1E1CDA23341D2B6D101CB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 549C8E7583A541E5923B31FC /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,8 @@
 		BE7F4DE01969C42B007DDDF3 /* TechNewsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TechNewsTests.m; sourceTree = "<group>"; };
 		BE7F4DEC1969D10A007DDDF3 /* NewsArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsArticle.h; sourceTree = "<group>"; };
 		BE7F4DED1969D10A007DDDF3 /* NewsArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsArticle.m; sourceTree = "<group>"; };
+		BE7F4DF01969D44A007DDDF3 /* DownloadHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadHelper.h; sourceTree = "<group>"; };
+		BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +129,7 @@
 		BE7F4DB51969C42B007DDDF3 /* TechNews */ = {
 			isa = PBXGroup;
 			children = (
+				BE7F4DEF1969D3DC007DDDF3 /* Helpers */,
 				BE7F4DEB1969D0EF007DDDF3 /* Models */,
 				BE7F4DEA1969D0A3007DDDF3 /* Controllers */,
 				BE7F4DBE1969C42B007DDDF3 /* AppDelegate.h */,
@@ -185,6 +189,15 @@
 				BE7F4DED1969D10A007DDDF3 /* NewsArticle.m */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		BE7F4DEF1969D3DC007DDDF3 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				BE7F4DF01969D44A007DDDF3 /* DownloadHelper.h */,
+				BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,6 +337,7 @@
 				BE7F4DBC1969C42B007DDDF3 /* main.m in Sources */,
 				BE7F4DEE1969D10A007DDDF3 /* NewsArticle.m in Sources */,
 				BE7F4DCC1969C42B007DDDF3 /* DetailViewController.m in Sources */,
+				BE7F4DF21969D44A007DDDF3 /* DownloadHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

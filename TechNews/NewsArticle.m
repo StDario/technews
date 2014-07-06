@@ -10,4 +10,12 @@
 
 @implementation NewsArticle
 
+
+-(void)initWithDictionary:(NSDictionary *)dict
+{
+    for (NSString *key in [dict allKeys]) {
+        [self setValue:dict[key] forKey:key];
+    }
+}
+
 @end
