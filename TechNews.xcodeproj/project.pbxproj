@@ -25,6 +25,7 @@
 		BE7F4DE11969C42B007DDDF3 /* TechNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DE01969C42B007DDDF3 /* TechNewsTests.m */; };
 		BE7F4DEE1969D10A007DDDF3 /* NewsArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DED1969D10A007DDDF3 /* NewsArticle.m */; };
 		BE7F4DF21969D44A007DDDF3 /* DownloadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */; };
+		BEF50EF81969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = BEF50EF71969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg */; };
 		E3F1E1CDA23341D2B6D101CB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 549C8E7583A541E5923B31FC /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,7 @@
 		BE7F4DED1969D10A007DDDF3 /* NewsArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsArticle.m; sourceTree = "<group>"; };
 		BE7F4DF01969D44A007DDDF3 /* DownloadHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadHelper.h; sourceTree = "<group>"; };
 		BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadHelper.m; sourceTree = "<group>"; };
+		BEF50EF71969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "bqggbbbcmaeatgb-jpg-large.jpeg"; path = "../../bqggbbbcmaeatgb-jpg-large.jpeg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 				BE7F4DEA1969D0A3007DDDF3 /* Controllers */,
 				BE7F4DBE1969C42B007DDDF3 /* AppDelegate.h */,
 				BE7F4DBF1969C42B007DDDF3 /* AppDelegate.m */,
+				BEF50EF71969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg */,
 				BE7F4DCD1969C42B007DDDF3 /* Images.xcassets */,
 				BE7F4DB61969C42B007DDDF3 /* Supporting Files */,
 			);
@@ -280,6 +283,7 @@
 				BE7F4DC61969C42B007DDDF3 /* Main_iPad.storyboard in Resources */,
 				BE7F4DCE1969C42B007DDDF3 /* Images.xcassets in Resources */,
 				BE7F4DC31969C42B007DDDF3 /* Main_iPhone.storyboard in Resources */,
+				BEF50EF81969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg in Resources */,
 				BE7F4DBA1969C42B007DDDF3 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

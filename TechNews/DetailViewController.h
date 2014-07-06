@@ -14,4 +14,10 @@
 @property (strong, nonatomic) NewsArticle *detailItem;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+
+@property (weak, nonatomic) IBOutlet UITextView *articleContent;
+
+@property (weak, nonatomic) IBOutlet UILabel *sourceName;
+
+@property (weak, nonatomic) IBOutlet UIImageView *articleImage;
 @end

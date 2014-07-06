@@ -13,6 +13,9 @@
 - (void)configureView;
 @end
 
+#define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+
+
 @implementation DetailViewController
 
 #pragma mark - Managing the detail item
@@ -37,7 +40,27 @@
 
     if (self.detailItem) {
         self.detailDescriptionLabel.text = self.detailItem.title;
+        self.sourceName.text = self.detailItem.sourceName;
+        [self downloadPicture];
     }
+}
+
+-(void)downloadPicture{
+    
+    
+    dispatch_async(kBgQueue, ^{
+        NSData *imgData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:self.detailItem.imageUrl]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIImage *image;
+            if (imgData) {
+                image = [[UIImage alloc] initWithData:imgData];
+            }
+            else {
+                image = nil;
+            }
+            self.articleImage.image = image;
+        });
+    });
 }
 
 - (void)viewDidLoad
