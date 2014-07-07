@@ -8,8 +8,12 @@
 
 #import "MasterViewController.h"
 #import "NewsArticle.h"
+#import "CustomTableViewCell.h"
+#import "ImageCache.h"
 
 static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/technews.php";
+
+#define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
 #import "DetailViewController.h"
 
@@ -38,6 +42,7 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     //UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     //self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    [self.tableView registerClass:[CustomTableViewCell class] forCellReuseIdentifier:@"Cell"];
     [self downloadNewsArticles];
 }
 
@@ -104,10 +109,36 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-
-    NewsArticle *object = _objects[indexPath.row];
-    cell.textLabel.text = object.title;
+    CustomTableViewCell *cell = (CustomTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+//    if (cell == nil) {
+//        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"CustomTableViewCell" owner:self options:nil];
+//        cell = nib[0];
+//        [cell initCell];
+//    }
+//    [cell clearCell];
+    
+    NewsArticle *article = [_objects objectAtIndex:indexPath.row];
+    [cell updateCellWithArticle:article];
+    
+    if([[ImageCache sharedImageCache] DoesExist:article.title]){
+        [cell updateImage:[[ImageCache sharedImageCache] GetImage:article.imageUrl]];
+    }
+    else {
+        dispatch_async(kBgQueue, ^{
+            NSData *imgData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:article.imageUrl]];
+            if (imgData) {
+                UIImage *image = [UIImage imageWithData:imgData];
+                if (image) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        CustomTableViewCell *cell = (id)[tableView cellForRowAtIndexPath:indexPath];
+                        [cell updateImage:image];
+                        [[ImageCache sharedImageCache] AddImageReference:article.imageUrl AddImage:image];
+                    });
+                }
+            }
+        });
+    }
+    
     return cell;
 }
 
@@ -127,21 +158,6 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     }
 }
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
