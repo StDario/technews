@@ -11,7 +11,8 @@
 #import "CustomTableViewCell.h"
 #import "ImageCache.h"
 
-static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/technews.php";
+static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/technews.php?page=";
+static NSString * const DownloadImageUrlString = @"http://skopjeparking.byethost7.com/imageScaller.php?url=";
 
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
@@ -23,6 +24,8 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
 @end
 
 @implementation MasterViewController
+
+int page = 1;
 
 - (void)awakeFromNib
 {
@@ -43,12 +46,12 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     //self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     [self.tableView registerClass:[CustomTableViewCell class] forCellReuseIdentifier:@"Cell"];
-    [self downloadNewsArticles];
+    _objects = [[NSMutableArray alloc] init];
+    [self downloadNewsArticles:1];
 }
 
 -(void)handleResponse:(NSArray *)articles
 {
-    _objects = [[NSMutableArray alloc] init];
     
     for(id article in articles){
         NewsArticle *newsArticle = [[NewsArticle alloc] init];
@@ -59,9 +62,10 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     [self.tableView reloadData];
 }
 
-- (void)downloadNewsArticles
+- (void)downloadNewsArticles:(int)page
 {
-    NSURL *url = [NSURL URLWithString:DownloadUrlString];
+    NSString *urlString = [NSString stringWithFormat:@"%@%i", DownloadUrlString, page];
+    NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
     // 2
@@ -110,21 +114,22 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CustomTableViewCell *cell = (CustomTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-//    if (cell == nil) {
-//        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"CustomTableViewCell" owner:self options:nil];
-//        cell = nib[0];
-//        [cell initCell];
-//    }
-//    [cell clearCell];
+    if (cell == nil) {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"CustomTableViewCell" owner:self options:nil];
+        cell = nib[0];
+        [cell initCell];
+    }
+    [cell clearCell];
     
     NewsArticle *article = [_objects objectAtIndex:indexPath.row];
     [cell updateCellWithArticle:article];
     
     if([[ImageCache sharedImageCache] DoesExist:article.title]){
-        [cell updateImage:[[ImageCache sharedImageCache] GetImage:article.imageUrl]];
+        [cell updateImage:[[ImageCache sharedImageCache] GetImage:article.title]];
     }
     else {
         dispatch_async(kBgQueue, ^{
+            //NSString *imageUrl = [NSString stringWithFormat:@"%@%@", DownloadImageUrlString, article.imageUrl];
             NSData *imgData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:article.imageUrl]];
             if (imgData) {
                 UIImage *image = [UIImage imageWithData:imgData];
@@ -132,7 +137,7 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
                     dispatch_async(dispatch_get_main_queue(), ^{
                         CustomTableViewCell *cell = (id)[tableView cellForRowAtIndexPath:indexPath];
                         [cell updateImage:image];
-                        [[ImageCache sharedImageCache] AddImageReference:article.imageUrl AddImage:image];
+                        [[ImageCache sharedImageCache] AddImageReference:article.title AddImage:image];
                     });
                 }
             }
@@ -140,6 +145,14 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     }
     
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if([indexPath isEqual:[NSIndexPath indexPathForRow:[self tableView:self.tableView numberOfRowsInSection:0] -1 inSection:0]]){
+        page += _objects.count;
+        [self downloadNewsArticles:page];
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
