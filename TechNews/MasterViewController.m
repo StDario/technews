@@ -45,7 +45,6 @@ int page = 1;
     //UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     //self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
-    [self.tableView registerClass:[CustomTableViewCell class] forCellReuseIdentifier:@"Cell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"CustomTableViewCell" bundle:nil]
          forCellReuseIdentifier:@"Cell"];
     _objects = [[NSMutableArray alloc] init];
@@ -124,6 +123,7 @@ int page = 1;
     
     NewsArticle *article = [_objects objectAtIndex:indexPath.row];
     [cell updateCellWithArticle:article];
+    
     
     if([[ImageCache sharedImageCache] DoesExist:article.title]){
         [cell updateImage:[[ImageCache sharedImageCache] GetImage:article.title]];

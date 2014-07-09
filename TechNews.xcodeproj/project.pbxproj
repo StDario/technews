@@ -28,6 +28,7 @@
 		BE7F4DE11969C42B007DDDF3 /* TechNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DE01969C42B007DDDF3 /* TechNewsTests.m */; };
 		BE7F4DEE1969D10A007DDDF3 /* NewsArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DED1969D10A007DDDF3 /* NewsArticle.m */; };
 		BE7F4DF21969D44A007DDDF3 /* DownloadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */; };
+		BEAA5342196DB43900C847ED /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEAA5341196DB43900C847ED /* QuartzCore.framework */; };
 		BEF50EF81969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = BEF50EF71969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg */; };
 		E3F1E1CDA23341D2B6D101CB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 549C8E7583A541E5923B31FC /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,7 @@
 		BE7F4DED1969D10A007DDDF3 /* NewsArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsArticle.m; sourceTree = "<group>"; };
 		BE7F4DF01969D44A007DDDF3 /* DownloadHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadHelper.h; sourceTree = "<group>"; };
 		BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadHelper.m; sourceTree = "<group>"; };
+		BEAA5341196DB43900C847ED /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BEF50EF71969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "bqggbbbcmaeatgb-jpg-large.jpeg"; path = "../../bqggbbbcmaeatgb-jpg-large.jpeg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEAA5342196DB43900C847ED /* QuartzCore.framework in Frameworks */,
 				BE7F4DB21969C42B007DDDF3 /* CoreGraphics.framework in Frameworks */,
 				BE7F4DB41969C42B007DDDF3 /* UIKit.framework in Frameworks */,
 				BE7F4DB01969C42B007DDDF3 /* Foundation.framework in Frameworks */,
@@ -137,6 +140,7 @@
 		BE7F4DAE1969C42B007DDDF3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BEAA5341196DB43900C847ED /* QuartzCore.framework */,
 				BE7F4DAF1969C42B007DDDF3 /* Foundation.framework */,
 				BE7F4DB11969C42B007DDDF3 /* CoreGraphics.framework */,
 				BE7F4DB31969C42B007DDDF3 /* UIKit.framework */,
