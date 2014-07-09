@@ -46,6 +46,8 @@ int page = 1;
     //self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     [self.tableView registerClass:[CustomTableViewCell class] forCellReuseIdentifier:@"Cell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"CustomTableViewCell" bundle:nil]
+         forCellReuseIdentifier:@"Cell"];
     _objects = [[NSMutableArray alloc] init];
     [self downloadNewsArticles:1];
 }
@@ -111,15 +113,14 @@ int page = 1;
     return _objects.count;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 219;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CustomTableViewCell *cell = (CustomTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    if (cell == nil) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"CustomTableViewCell" owner:self options:nil];
-        cell = nib[0];
-        [cell initCell];
-    }
-    [cell clearCell];
     
     NewsArticle *article = [_objects objectAtIndex:indexPath.row];
     [cell updateCellWithArticle:article];
@@ -135,9 +136,16 @@ int page = 1;
                 UIImage *image = [UIImage imageWithData:imgData];
                 if (image) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        CustomTableViewCell *cell = (id)[tableView cellForRowAtIndexPath:indexPath];
-                        [cell updateImage:image];
-                        [[ImageCache sharedImageCache] AddImageReference:article.title AddImage:image];
+                        //CustomTableViewCell *cell = (id)[tableView cellForRowAtIndexPath:indexPath];
+                        CGSize newSize;
+                        newSize.height = 150;
+                        newSize.width = 300;
+                        UIGraphicsBeginImageContext(newSize);
+                        [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+                        UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+                        UIGraphicsEndImageContext();
+                        [cell updateImage:newImage];
+                        [[ImageCache sharedImageCache] AddImageReference:article.title AddImage:newImage];
                     });
                 }
             }

@@ -13,6 +13,7 @@
 
 @property (nonatomic, weak) IBOutlet UILabel *title;
 @property (nonatomic, weak) IBOutlet UIImageView *backgroundImage;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *imageLoader;
 
 - (void)initCell;
 - (void)clearCell;

@@ -48,14 +48,15 @@
 
 - (void)updateImage:(UIImage *)image
 {
+    [self.imageLoader stopAnimating];
     self.backgroundImage.image = image;
-    //[self.imageLoader stopAnimating];
 }
 
 
 - (void)updateCellWithArticle:(NewsArticle *)article
 {
     self.title.text = article.title;
+    [self.imageLoader startAnimating];
 }
 
 @end
