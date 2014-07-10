@@ -13,6 +13,7 @@
 - (void)configureView;
 @end
 
+static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/fetchArticle.php?";
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
 
@@ -20,10 +21,10 @@
 
 #pragma mark - Managing the detail item
 
-- (void)setDetailItem:(id)newDetailItem
+- (void)setNewsArticle:(id)newDetailItem
 {
-    if (_detailItem != newDetailItem) {
-        _detailItem = newDetailItem;
+    if (_newsArticle != newDetailItem) {
+        _newsArticle = newDetailItem;
         
         // Update the view.
         [self configureView];
@@ -38,18 +39,26 @@
 {
     // Update the user interface for the detail item.
 
-    if (self.detailItem) {
-        self.detailDescriptionLabel.text = self.detailItem.title;
-        self.sourceName.text = self.detailItem.sourceName;
-        [self downloadPicture];
+    if (self.newsArticle) {
+        self.detailDescriptionLabel.text = self.newsArticle.title;
+        self.sourceName.text = self.newsArticle.sourceName;
+        self.sourceName.text = _newsArticle.sourceName;
+        [self downloadPicture:_newsArticle.sourceImage forImageView:self.sourceImage];
+        self.articleTitle.text =_newsArticle.title;
+        self.author.text = _newsArticle.author;
+        self.publishDate.text = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
+                                                                                       dateStyle:NSDateFormatterShortStyle
+                                                                                       timeStyle:NSDateFormatterFullStyle];
+        [self downloadPicture:_newsArticle.imageUrl forImageView:self.articleImage];
+        [self downloadArticleContent];
     }
 }
 
--(void)downloadPicture{
+-(void)downloadPicture:(NSString *)url forImageView:(UIImageView *)imageView{
     
     
     dispatch_async(kBgQueue, ^{
-        NSData *imgData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:self.detailItem.imageUrl]];
+        NSData *imgData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
         dispatch_async(dispatch_get_main_queue(), ^{
             UIImage *image;
             if (imgData) {
@@ -58,9 +67,45 @@
             else {
                 image = nil;
             }
-            self.articleImage.image = image;
+            imageView.image = image;
         });
     });
+}
+
+-(void)handleResponse:(NSString *)text
+{
+    self.articleContent.text = text;
+}
+
+-(void)downloadArticleContent
+{
+    NSString *urlString = [NSString stringWithFormat:@"%@sourceName=%@&file%@", DownloadUrlString, _newsArticle.sourceName, _newsArticle.file];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    // 2
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    operation.responseSerializer = [AFJSONResponseSerializer serializer];
+    operation.responseSerializer.acceptableContentTypes = [operation.responseSerializer.acceptableContentTypes setByAddingObject:@"text/html"];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSString *result = (NSString *)responseObject;
+        [self handleResponse:result];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        // 4
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Article Content"
+                                                            message:[error localizedDescription]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil];
+        [alertView show];
+    }];
+    
+    // 5
+    [operation start];
 }
 
 - (void)viewDidLoad
@@ -68,6 +113,16 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
+    self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
+
+}
+
+- (UIColor *)colorFromHexString:(NSString *)hexString {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
 - (void)didReceiveMemoryWarning

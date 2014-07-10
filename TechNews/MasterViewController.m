@@ -193,7 +193,7 @@ int page = 1;
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         NewsArticle *object = _objects[indexPath.row];
-        self.detailViewController.detailItem = object;
+        self.detailViewController.newsArticle = object;
     }
 }
 
@@ -202,7 +202,7 @@ int page = 1;
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NewsArticle *object = _objects[indexPath.row];
-        [[segue destinationViewController] setDetailItem:object];
+        [[segue destinationViewController] setNewsArticle:object];
     }
 }
 

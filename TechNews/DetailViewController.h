@@ -11,13 +11,21 @@
 
 @interface DetailViewController : UIViewController <UISplitViewControllerDelegate>
 
-@property (strong, nonatomic) NewsArticle *detailItem;
+@property (strong, nonatomic) NewsArticle *newsArticle;
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 
 @property (weak, nonatomic) IBOutlet UITextView *articleContent;
 
 @property (weak, nonatomic) IBOutlet UILabel *sourceName;
+
+@property (weak, nonatomic) IBOutlet UIImageView *sourceImage;
+
+@property (weak, nonatomic) IBOutlet UILabel *publishDate;
+
+@property (weak, nonatomic) IBOutlet UILabel *author;
+
+@property (weak, nonatomic) IBOutlet UILabel *articleTitle;
 
 @property (weak, nonatomic) IBOutlet UIImageView *articleImage;
 @end
