@@ -89,12 +89,12 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     
     // 2
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    //operation.responseSerializer = [AFHTTPRequestSerializer serializer];
+    //operation.responseSerializer = [AFJSONResponseSerializer serializer];
     operation.responseSerializer.acceptableContentTypes = [operation.responseSerializer.acceptableContentTypes setByAddingObject:@"text/html"];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        NSString *result = (NSString *)responseObject;
+        NSString *result = [operation responseString];
         [self handleResponse:result];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
