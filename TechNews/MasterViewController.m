@@ -48,6 +48,7 @@ int page = 1;
     [self.tableView registerNib:[UINib nibWithNibName:@"CustomTableViewCell" bundle:nil]
          forCellReuseIdentifier:@"Cell"];
     _objects = [[NSMutableArray alloc] init];
+    self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
     [self downloadNewsArticles:1];
 }
 
@@ -61,6 +62,14 @@ int page = 1;
     }
     
     [self.tableView reloadData];
+}
+
+- (UIColor *)colorFromHexString:(NSString *)hexString {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
 - (void)downloadNewsArticles:(int)page

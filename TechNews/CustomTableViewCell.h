@@ -15,6 +15,7 @@
 @property (nonatomic, weak) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *imageLoader;
 @property (nonatomic, weak) IBOutlet UIView *content;
+@property (nonatomic, weak) IBOutlet UILabel *timeAgo;
 
 - (void)initCell;
 - (void)clearCell;

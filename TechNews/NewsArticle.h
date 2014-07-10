@@ -16,6 +16,8 @@
 @property (nonatomic, strong) NSDate *publishDate;
 @property (nonatomic, strong) NSString *imageUrl;
 @property (nonatomic, strong) NSString *sourceName;
+@property (nonatomic, strong) NSString *sourceImage;
+@property (nonatomic, strong) NSString *file;
 
 -(void)initWithDictionary:(NSDictionary *)dict;
 

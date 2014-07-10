@@ -13,6 +13,10 @@
 
 @synthesize title;
 @synthesize backgroundImage;
+@synthesize timeAgo;
+double secondsInAnHour = 3600;
+double secondsInAnDay = 3600 * 24;
+double secondsInAnMinute = 60;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -35,6 +39,7 @@
 //    [self.contentView.layer addSublayer:sublayer];
     
     self.contentView.backgroundColor = [self colorFromHexString:@"#CACED9"];
+    //self.contentView.backgroundColor = [self colorFromHexString:@"#5EC4DB"];
 }
 
 - (UIColor *)colorFromHexString:(NSString *)hexString {
@@ -74,6 +79,25 @@
 - (void)updateCellWithArticle:(NewsArticle *)article
 {
     self.title.text = article.title;
+    NSDate *now = [NSDate date];
+    
+    NSTimeInterval distance = [now timeIntervalSinceDate:article.publishDate];
+    NSInteger days = distance / secondsInAnDay;
+    
+    if(days <= 0)
+    {
+        NSInteger hours = distance / secondsInAnHour;
+        if(hours <= 0){
+            NSInteger minutes = distance / secondsInAnMinute;
+            timeAgo.text = [NSString stringWithFormat:@"%im ago", minutes];
+        }
+        else
+            timeAgo.text = [NSString stringWithFormat:@"%ih ago", hours];
+    }
+    else {
+        timeAgo.text = [NSString stringWithFormat:@"%id ago", days];
+    }
+    
     [self.imageLoader startAnimating];
 }
 
