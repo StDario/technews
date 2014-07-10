@@ -79,13 +79,17 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
 
 -(void)downloadArticleContent
 {
-    NSString *urlString = [NSString stringWithFormat:@"%@sourceName=%@&file%@", DownloadUrlString, _newsArticle.sourceName, _newsArticle.file];
+    int location = [_newsArticle.file rangeOfString:@"/" options:NSBackwardsSearch].location;
+    NSRange fileRange = NSMakeRange(location + 1, _newsArticle.file.length - location - 1);
+    NSString *file = [_newsArticle.file substringWithRange: fileRange];
+    NSString *urlString = [NSString stringWithFormat:@"%@sourceName=%@&file=%@", DownloadUrlString, _newsArticle.sourceName, file];
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
     // 2
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    operation.responseSerializer = [AFJSONResponseSerializer serializer];
+    //operation.responseSerializer = [AFHTTPRequestSerializer serializer];
     operation.responseSerializer.acceptableContentTypes = [operation.responseSerializer.acceptableContentTypes setByAddingObject:@"text/html"];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {

@@ -195,6 +195,9 @@ int page = 1;
         NewsArticle *object = _objects[indexPath.row];
         self.detailViewController.newsArticle = object;
     }
+    else {
+        [self performSegueWithIdentifier:@"showDetail" sender:nil];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
