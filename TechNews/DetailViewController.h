@@ -28,4 +28,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *articleTitle;
 
 @property (weak, nonatomic) IBOutlet UIImageView *articleImage;
+
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
+
+@property (weak, nonatomic) IBOutlet UIButton *btnTwitter;
+
+@property (weak, nonatomic) IBOutlet UIButton *btnFacebook;
 @end

@@ -13,7 +13,7 @@
 - (void)configureView;
 @end
 
-static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/fetchArticle.php?";
+static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/fetchArticleHtml.php?";
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
 
@@ -35,23 +35,43 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     }        
 }
 
+-(void)setSocialButtons
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"twitter" ofType: @"png"];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile: path];
+    [self.btnTwitter setImage:image forState:UIControlStateNormal];
+    path = [[NSBundle mainBundle] pathForResource: @"twitter-background 2" ofType: @"png"];
+    image = [[UIImage alloc] initWithContentsOfFile: path];
+    [self.btnTwitter setImage:image forState:UIControlStateHighlighted];
+    
+    path = [[NSBundle mainBundle] pathForResource: @"facebook" ofType: @"png"];
+    image = [[UIImage alloc] initWithContentsOfFile: path];
+    [self.btnFacebook setImage:image forState:UIControlStateNormal];
+    path = [[NSBundle mainBundle] pathForResource: @"facebook-background 2" ofType: @"png"];
+    image = [[UIImage alloc] initWithContentsOfFile: path];
+    [self.btnFacebook setImage:image forState:UIControlStateHighlighted];
+}
+
 - (void)configureView
 {
     // Update the user interface for the detail item.
 
-    if (self.newsArticle) {
-        self.detailDescriptionLabel.text = self.newsArticle.title;
-        self.sourceName.text = self.newsArticle.sourceName;
-        self.sourceName.text = _newsArticle.sourceName;
-        [self downloadPicture:_newsArticle.sourceImage forImageView:self.sourceImage];
-        self.articleTitle.text =_newsArticle.title;
-        self.author.text = _newsArticle.author;
-        self.publishDate.text = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
-                                                                                       dateStyle:NSDateFormatterShortStyle
-                                                                                       timeStyle:NSDateFormatterFullStyle];
-        [self downloadPicture:_newsArticle.imageUrl forImageView:self.articleImage];
-        [self downloadArticleContent];
-    }
+//    if (self.newsArticle) {
+//        self.detailDescriptionLabel.text = self.newsArticle.title;
+//        self.sourceName.text = self.newsArticle.sourceName;
+//        self.sourceName.text = _newsArticle.sourceName;
+//        [self downloadPicture:_newsArticle.sourceImage forImageView:self.sourceImage];
+//        self.articleTitle.text =_newsArticle.title;
+//        self.author.text = _newsArticle.author;
+//        self.publishDate.text = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
+//                                                                                       dateStyle:NSDateFormatterShortStyle
+//                                                                                       timeStyle:NSDateFormatterFullStyle];
+//        [self downloadPicture:_newsArticle.imageUrl forImageView:self.articleImage];
+//        [self downloadArticleContent];
+//    }
+    [self downloadArticleContent];
+    [self setSocialButtons];
+    self.articleTitle.text =_newsArticle.title;
 }
 
 -(void)downloadPicture:(NSString *)url forImageView:(UIImageView *)imageView{
@@ -74,7 +94,7 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
 
 -(void)handleResponse:(NSString *)text
 {
-    self.articleContent.text = text;
+    //self.articleContent.text = text;
 }
 
 -(void)downloadArticleContent
@@ -86,6 +106,7 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [self.webView loadRequest:request];
     
     // 2
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];

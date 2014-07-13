@@ -66,6 +66,11 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QTZ-4s-KYU">
+                                <rect key="frame" x="0.0" y="59" width="703" height="709"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </webView>
                         </subviews>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </scrollView>
@@ -78,6 +83,7 @@
                         <outlet property="author" destination="OkZ-eA-HWf" id="fGg-RH-Jpr"/>
                         <outlet property="publishDate" destination="8nA-hw-HYn" id="kwU-Xa-STj"/>
                         <outlet property="sourceImage" destination="Zea-AN-qS5" id="MIv-sS-OMB"/>
+                        <outlet property="webView" destination="QTZ-4s-KYU" id="agM-V3-KGZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
