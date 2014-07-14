@@ -28,6 +28,7 @@
 		BE7F4DE11969C42B007DDDF3 /* TechNewsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DE01969C42B007DDDF3 /* TechNewsTests.m */; };
 		BE7F4DEE1969D10A007DDDF3 /* NewsArticle.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DED1969D10A007DDDF3 /* NewsArticle.m */; };
 		BE7F4DF21969D44A007DDDF3 /* DownloadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */; };
+		BE9E914519747C57009FF006 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9E914419747C57009FF006 /* Social.framework */; };
 		BEAA5342196DB43900C847ED /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEAA5341196DB43900C847ED /* QuartzCore.framework */; };
 		BEAF000B1972C6130026D2E3 /* twitter-background 2.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAF00091972C6130026D2E3 /* twitter-background 2.png */; };
 		BEAF000C1972C6130026D2E3 /* facebook-background 2.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAF000A1972C6130026D2E3 /* facebook-background 2.png */; };
@@ -83,6 +84,7 @@
 		BE7F4DED1969D10A007DDDF3 /* NewsArticle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsArticle.m; sourceTree = "<group>"; };
 		BE7F4DF01969D44A007DDDF3 /* DownloadHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadHelper.h; sourceTree = "<group>"; };
 		BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadHelper.m; sourceTree = "<group>"; };
+		BE9E914419747C57009FF006 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		BEAA5341196DB43900C847ED /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BEAF00091972C6130026D2E3 /* twitter-background 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter-background 2.png"; sourceTree = "<group>"; };
 		BEAF000A1972C6130026D2E3 /* facebook-background 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-background 2.png"; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE9E914519747C57009FF006 /* Social.framework in Frameworks */,
 				BEAA5342196DB43900C847ED /* QuartzCore.framework in Frameworks */,
 				BE7F4DB21969C42B007DDDF3 /* CoreGraphics.framework in Frameworks */,
 				BE7F4DB41969C42B007DDDF3 /* UIKit.framework in Frameworks */,
@@ -152,6 +155,7 @@
 		BE7F4DAE1969C42B007DDDF3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BE9E914419747C57009FF006 /* Social.framework */,
 				BEAA5341196DB43900C847ED /* QuartzCore.framework */,
 				BE7F4DAF1969C42B007DDDF3 /* Foundation.framework */,
 				BE7F4DB11969C42B007DDDF3 /* CoreGraphics.framework */,

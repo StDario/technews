@@ -7,6 +7,7 @@
 //
 
 #import "DetailViewController.h"
+#import <Social/Social.h>
 
 @interface DetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -72,6 +73,11 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     [self downloadArticleContent];
     [self setSocialButtons];
     self.articleTitle.text =_newsArticle.title;
+    self.author.text = _newsArticle.author;
+    self.publishDate.text = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
+                                                                                   dateStyle:NSDateFormatterShortStyle
+                                                                                   timeStyle:NSDateFormatterFullStyle];
+    
 }
 
 -(void)downloadPicture:(NSString *)url forImageView:(UIImageView *)imageView{
@@ -140,6 +146,53 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     [self configureView];
     self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
 
+}
+
+- (IBAction)shareOnFacebook:(id)sender;
+{
+//    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
+//    {
+//        SLComposeViewController *facebookSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+//        
+//        NSString *initialText = _newsArticle.link;
+//        
+//        [facebookSheet setInitialText: initialText];
+//        [self presentViewController:facebookSheet animated:YES completion:nil];
+//    }
+//    else
+//    {
+//        UIAlertView *alertView = [[UIAlertView alloc]
+//                                  initWithTitle:@"Sorry"
+//                                  message:@"You can't share on facebook right now, make sure your device has an internet connection and you have at least one Twitter account setup"
+//                                  delegate:self
+//                                  cancelButtonTitle:@"OK"
+//                                  otherButtonTitles:nil];
+//        [alertView show];
+//    }
+}
+
+
+- (IBAction)shareOnTwitter:(id)sender;
+{
+//    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
+//    {
+//        SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+//        
+//        NSString *initialText = _newsArticle.link;
+//        
+//        [tweetSheet setInitialText: initialText];
+//        [self presentViewController:tweetSheet animated:YES completion:nil];
+//    }
+//    else
+//    {
+//        UIAlertView *alertView = [[UIAlertView alloc]
+//                                  initWithTitle:@"Sorry"
+//                                  message:@"You can't send a tweet right now, make sure your device has an internet connection and you have at least one Twitter account setup"
+//                                  delegate:self
+//                                  cancelButtonTitle:@"OK"
+//                                  otherButtonTitles:nil];
+//        [alertView show];
+//    }
 }
 
 - (UIColor *)colorFromHexString:(NSString *)hexString {

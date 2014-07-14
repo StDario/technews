@@ -34,4 +34,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnTwitter;
 
 @property (weak, nonatomic) IBOutlet UIButton *btnFacebook;
+
+- (IBAction)shareOnFacebook:(id)sender;
+
+- (IBAction)shareOnTwitter:(id)sender;
 @end
