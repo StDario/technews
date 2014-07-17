@@ -10,6 +10,7 @@
 		BE6D8D25196B0CA100B19C02 /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE6D8D24196B0CA100B19C02 /* CustomTableViewCell.xib */; };
 		BE6D8D28196B0E2800B19C02 /* CustomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6D8D27196B0E2800B19C02 /* CustomTableViewCell.m */; };
 		BE6D8D2B196B11B600B19C02 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6D8D2A196B11B600B19C02 /* ImageCache.m */; };
+		BE6E577519785EF1002BB30D /* NewsContent.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6E577419785EF1002BB30D /* NewsContent.m */; };
 		BE7F4DB01969C42B007DDDF3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE7F4DAF1969C42B007DDDF3 /* Foundation.framework */; };
 		BE7F4DB21969C42B007DDDF3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE7F4DB11969C42B007DDDF3 /* CoreGraphics.framework */; };
 		BE7F4DB41969C42B007DDDF3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE7F4DB31969C42B007DDDF3 /* UIKit.framework */; };
@@ -36,6 +37,7 @@
 		BEAFFFFA1972BFB40026D2E3 /* facebook-background.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAFFFF61972BFB40026D2E3 /* facebook-background.png */; };
 		BEAFFFFB1972BFB40026D2E3 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAFFFF71972BFB40026D2E3 /* facebook.png */; };
 		BEAFFFFC1972BFB40026D2E3 /* twitter-background.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAFFFF81972BFB40026D2E3 /* twitter-background.png */; };
+		BEEC5A6E19748F4F0071305D /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = BEEC5A6D19748F4F0071305D /* placeholder.png */; };
 		BEF50EF81969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = BEF50EF71969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg */; };
 		E3F1E1CDA23341D2B6D101CB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 549C8E7583A541E5923B31FC /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -58,6 +60,8 @@
 		BE6D8D27196B0E2800B19C02 /* CustomTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTableViewCell.m; sourceTree = "<group>"; };
 		BE6D8D29196B11B600B19C02 /* ImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCache.h; sourceTree = "<group>"; };
 		BE6D8D2A196B11B600B19C02 /* ImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCache.m; sourceTree = "<group>"; };
+		BE6E577319785EF1002BB30D /* NewsContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsContent.h; sourceTree = "<group>"; };
+		BE6E577419785EF1002BB30D /* NewsContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsContent.m; sourceTree = "<group>"; };
 		BE7F4DAC1969C42B007DDDF3 /* TechNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TechNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE7F4DAF1969C42B007DDDF3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE7F4DB11969C42B007DDDF3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -92,6 +96,7 @@
 		BEAFFFF61972BFB40026D2E3 /* facebook-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-background.png"; sourceTree = "<group>"; };
 		BEAFFFF71972BFB40026D2E3 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		BEAFFFF81972BFB40026D2E3 /* twitter-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter-background.png"; sourceTree = "<group>"; };
+		BEEC5A6D19748F4F0071305D /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		BEF50EF71969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "bqggbbbcmaeatgb-jpg-large.jpeg"; path = "../../bqggbbbcmaeatgb-jpg-large.jpeg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -169,6 +174,7 @@
 		BE7F4DB51969C42B007DDDF3 /* TechNews */ = {
 			isa = PBXGroup;
 			children = (
+				BEEC5A6D19748F4F0071305D /* placeholder.png */,
 				BEAF00091972C6130026D2E3 /* twitter-background 2.png */,
 				BEAF000A1972C6130026D2E3 /* facebook-background 2.png */,
 				BE6D8D21196A004200B19C02 /* Custom Views */,
@@ -235,6 +241,8 @@
 			children = (
 				BE7F4DEC1969D10A007DDDF3 /* NewsArticle.h */,
 				BE7F4DED1969D10A007DDDF3 /* NewsArticle.m */,
+				BE6E577319785EF1002BB30D /* NewsContent.h */,
+				BE6E577419785EF1002BB30D /* NewsContent.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -330,6 +338,7 @@
 				BEAFFFF91972BFB40026D2E3 /* twitter.png in Resources */,
 				BEAFFFFA1972BFB40026D2E3 /* facebook-background.png in Resources */,
 				BE7F4DC61969C42B007DDDF3 /* Main_iPad.storyboard in Resources */,
+				BEEC5A6E19748F4F0071305D /* placeholder.png in Resources */,
 				BE7F4DCE1969C42B007DDDF3 /* Images.xcassets in Resources */,
 				BEAFFFFB1972BFB40026D2E3 /* facebook.png in Resources */,
 				BE6D8D25196B0CA100B19C02 /* CustomTableViewCell.xib in Resources */,
@@ -393,6 +402,7 @@
 				BE7F4DC01969C42B007DDDF3 /* AppDelegate.m in Sources */,
 				BE6D8D28196B0E2800B19C02 /* CustomTableViewCell.m in Sources */,
 				BE7F4DC91969C42B007DDDF3 /* MasterViewController.m in Sources */,
+				BE6E577519785EF1002BB30D /* NewsContent.m in Sources */,
 				BE7F4DBC1969C42B007DDDF3 /* main.m in Sources */,
 				BE7F4DEE1969D10A007DDDF3 /* NewsArticle.m in Sources */,
 				BE7F4DCC1969C42B007DDDF3 /* DetailViewController.m in Sources */,

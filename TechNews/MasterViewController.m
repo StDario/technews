@@ -134,6 +134,10 @@ int page = 1;
     [cell updateCellWithArticle:article];
     
     
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"placeholder" ofType: @"png"];
+    [cell updateImage:[[UIImage alloc] initWithContentsOfFile: path]];
+    
+    
     if([[ImageCache sharedImageCache] DoesExist:article.title]){
         [cell updateImage:[[ImageCache sharedImageCache] GetImage:article.title]];
     }
@@ -143,7 +147,7 @@ int page = 1;
             NSData *imgData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:article.imageUrl]];
             if (imgData) {
                 UIImage *image = [UIImage imageWithData:imgData];
-                if (image) {
+                if (image && imgData.length > 50) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         //CustomTableViewCell *cell = (id)[tableView cellForRowAtIndexPath:indexPath];
                         CGSize newSize;
@@ -156,6 +160,10 @@ int page = 1;
                         [cell updateImage:newImage];
                         [[ImageCache sharedImageCache] AddImageReference:article.title AddImage:newImage];
                     });
+                }
+                else {
+                    NSString *path = [[NSBundle mainBundle] pathForResource: @"placeholder" ofType: @"png"];
+                    [cell updateImage:[[UIImage alloc] initWithContentsOfFile: path]];
                 }
             }
         });

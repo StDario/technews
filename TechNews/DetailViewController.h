@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "NewsArticle.h"
 
-@interface DetailViewController : UIViewController <UISplitViewControllerDelegate>
+@interface DetailViewController : UIViewController <UISplitViewControllerDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) NewsArticle *newsArticle;
 
@@ -34,6 +34,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnTwitter;
 
 @property (weak, nonatomic) IBOutlet UIButton *btnFacebook;
+
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 - (IBAction)shareOnFacebook:(id)sender;
 

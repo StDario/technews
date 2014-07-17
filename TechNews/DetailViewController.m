@@ -8,6 +8,7 @@
 
 #import "DetailViewController.h"
 #import <Social/Social.h>
+#import "NewsContent.h"
 
 @interface DetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -15,6 +16,7 @@
 @end
 
 static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/fetchArticleHtml.php?";
+static NSString * const DownloadContentUrlString = @"http://skopjeparking.byethost7.com/NewsContent.php?";
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
 
@@ -34,6 +36,14 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     if (self.masterPopoverController != nil) {
         [self.masterPopoverController dismissPopoverAnimated:YES];
     }        
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.scrollView.delegate = self;
+    self.scrollView.scrollEnabled = YES;
+    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
 -(void)setSocialButtons
@@ -70,13 +80,15 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
 //        [self downloadPicture:_newsArticle.imageUrl forImageView:self.articleImage];
 //        [self downloadArticleContent];
 //    }
-    [self downloadArticleContent];
+    //[self downloadArticleContent];
+    [self downloadNewsArticleContent];
     [self setSocialButtons];
     self.articleTitle.text =_newsArticle.title;
     self.author.text = _newsArticle.author;
     self.publishDate.text = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
                                                                                    dateStyle:NSDateFormatterShortStyle
                                                                                    timeStyle:NSDateFormatterFullStyle];
+    
     
 }
 
@@ -98,9 +110,72 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     });
 }
 
--(void)handleResponse:(NSString *)text
+-(void)showLayoutForiPhone:(NewsContent *)content
 {
-    //self.articleContent.text = text;
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 70, 300, 1000)];
+    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0,0, 300, 500)];
+    textView.text = content.text;
+    UIFont *font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+    
+    textView.font = font;
+    
+    [scrollView addSubview:textView];
+    [self.view addSubview:scrollView];
+}
+
+-(void)showLayoutForiPad:(NewsContent *)content
+{
+    
+}
+
+-(void)handleResponse:(NewsContent *)content
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+    {
+        [self showLayoutForiPad:content];
+    }
+    else
+    {
+        [self showLayoutForiPhone:content];
+    }
+}
+
+-(void)downloadNewsArticleContent
+{
+    int location = [_newsArticle.file rangeOfString:@"/" options:NSBackwardsSearch].location;
+    NSRange fileRange = NSMakeRange(location + 1, _newsArticle.file.length - location - 1);
+    NSString *file = [_newsArticle.file substringWithRange: fileRange];
+    NSString *urlString = [NSString stringWithFormat:@"%@source=%@&file=%@", DownloadContentUrlString, _newsArticle.sourceName, file];
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    operation.responseSerializer = [AFJSONResponseSerializer serializer];
+    operation.responseSerializer.acceptableContentTypes = [operation.responseSerializer.acceptableContentTypes setByAddingObject:@"text/html"];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSDictionary *result = (NSDictionary *)responseObject;
+        NewsContent *content = [[NewsContent alloc] init];
+        [content initWithDictionary:result];
+        [self handleResponse:content];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        // 4
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Article Content"
+                                                            message:[error localizedDescription]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil];
+        [alertView show];
+    }];
+    
+    // 5
+    [operation start];
 }
 
 -(void)downloadArticleContent
