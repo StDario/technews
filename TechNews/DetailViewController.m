@@ -23,6 +23,11 @@ static NSString * const DownloadContentUrlString = @"http://skopjeparking.byetho
 @implementation DetailViewController
 
 bool flag = false;
+UIScrollView *scrollView;
+int nextY;
+CGSize screenSize;
+int scrollHeight;
+int margins;
 
 #pragma mark - Managing the detail item
 
@@ -137,10 +142,10 @@ bool flag = false;
 
 -(void)showLayoutForiPhone:(NewsContent *)content
 {
-    CGSize screenSize = self.view.frame.size;
-    int scrollHeight = 500;
-    int margins = 20;
-    int nextY = 0;
+    screenSize = self.view.frame.size;
+    scrollHeight = 100;
+    margins = 20;
+    nextY = 0;
     int titleHeight = 100;
     int authorHeight = 20;
     int authorWidht = 300;
@@ -199,17 +204,33 @@ bool flag = false;
     scrollHeight += socialButtonHeight;
     nextY += socialButtonHeight;
     
-    scrollHeight += 500;
+    CGSize maximumLabelSize = CGSizeMake(screenSize.width - margins, FLT_MAX);
+    
+    
+    
+    
     UILabel *textView = [[UILabel alloc] initWithFrame:CGRectMake(0, nextY, screenSize.width - margins, 700)];
+    UIFont *font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+    textView.font = font;
+    CGSize t = [content.text boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin
+        attributes:@{
+             NSFontAttributeName : textView.font
+             }
+            context:nil].size;
+    
+    //CGSize expectedLabelSize = [content.text sizeWithFont:textView.font constrainedToSize:maximumLabelSize lineBreakMode:textView.lineBreakMode];
+    CGRect frame = textView.frame;
+    frame.size.height = t.height;
+    textView.frame = frame;
     textView.text = content.text;
     textView.lineBreakMode = NSLineBreakByWordWrapping;
     textView.numberOfLines = 0;
     //textView.editable = false;
-    UIFont *font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+    scrollHeight += t.height;
+    nextY += t.height;
     
-    textView.font = font;
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 70, screenSize.width, screenSize.height)];
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 70, screenSize.width, screenSize.height)];
     scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
     scrollView.delegate = self;
     scrollView.scrollEnabled = YES;
@@ -221,7 +242,43 @@ bool flag = false;
     [scrollView addSubview:textView];
     [scrollView addSubview:btnFacebook];
     [scrollView addSubview:btnTwitter];
+    
+    
+    for(NSString *imageUrl in content.images)
+    {
+        UIImageView *imageView = [[UIImageView alloc] init];
+        [self downloadContentPictures:imageUrl forImageView:imageView];
+        [scrollView addSubview:imageView];
+    
+    }
+    
+    
     [self.view addSubview:scrollView];
+}
+
+-(void)downloadContentPictures:(NSString *)url forImageView:(UIImageView *)imageView{
+    
+    
+    dispatch_async(kBgQueue, ^{
+        NSData *imgData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIImage *image;
+            if (imgData) {
+                image = [[UIImage alloc] initWithData:imgData];
+            }
+            else {
+                image = nil;
+            }
+            
+            CGRect frame = CGRectMake(0, nextY, screenSize.width - margins, image.size.height);
+            imageView.frame = frame;
+            imageView.image = image;
+            nextY += image.size.height;
+            scrollHeight += image.size.height;
+            //frame = CGRectMake(10, 70, screenSize.width, scrollHeight);
+            scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
+        });
+    });
 }
 
 -(void)showLayoutForiPad:(NewsContent *)content
