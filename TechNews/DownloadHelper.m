@@ -25,8 +25,8 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        NSDictionary *result = (NSDictionary *)responseObject;
-        NSArray *results = result[@"results"];
+//        NSDictionary *result = (NSDictionary *)responseObject;
+//        NSArray *results = result[@"results"];
         //[self handleResponse:results];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

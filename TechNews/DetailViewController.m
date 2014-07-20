@@ -19,6 +19,14 @@ static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com
 static NSString * const DownloadContentUrlString = @"http://skopjeparking.byethost7.com/NewsContent.php?";
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
+typedef enum ScrollDirection {
+    ScrollDirectionNone,
+    ScrollDirectionRight,
+    ScrollDirectionLeft,
+    ScrollDirectionUp,
+    ScrollDirectionDown,
+    ScrollDirectionCrazy,
+} ScrollDirection;
 
 @implementation DetailViewController
 
@@ -140,6 +148,11 @@ int margins;
     });
 }
 
+-(void)showLayoutForiPad:(NewsContent *)content
+{
+    
+}
+
 -(void)showLayoutForiPhone:(NewsContent *)content
 {
     screenSize = self.view.frame.size;
@@ -249,12 +262,62 @@ int margins;
         UIImageView *imageView = [[UIImageView alloc] init];
         [self downloadContentPictures:imageUrl forImageView:imageView];
         [scrollView addSubview:imageView];
+    }
     
+    for(NSString *videoUrl in content.videos)
+    {
+        NSString *urlStr = [videoUrl stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+        NSURL *url = [NSURL URLWithString:urlStr];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, nextY, screenSize.width - margins, 300)];
+        [webView loadRequest:request];
+        scrollHeight += 300;
+        nextY += 300;
+        scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
+        [scrollView addSubview:webView];
     }
     
     
     [self.view addSubview:scrollView];
+    
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)sender
+{
+    ScrollDirection scrollDirection;
+    if (self.lastContentOffset > scrollView.contentOffset.y)
+        scrollDirection = ScrollDirectionUp;
+    else if (self.lastContentOffset < scrollView.contentOffset.y)
+        scrollDirection = ScrollDirectionDown;
+    
+    self.lastContentOffset = scrollView.contentOffset.y;
+    
+    // do whatever you need to with scrollDirection here.
+    
+    if(scrollDirection == ScrollDirectionUp)
+    {
+        [self.navigationController setNavigationBarHidden: NO animated:YES];
+    }
+    else if(self.lastContentOffset > 0)
+    {
+        [self.navigationController setNavigationBarHidden: YES animated:YES];
+    }
+}
+
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{
+//    CGPoint translation = [scrollView.panGestureRecognizer translationInView:scrollView.superview];
+//    
+//    if(translation.y < 0)
+//    {
+//        // react to dragging down
+//        [self.navigationController setNavigationBarHidden: YES animated:YES];
+//    } else
+//    {
+//        // react to dragging up
+//        [self.navigationController setNavigationBarHidden:NO animated:YES];
+//    }
+//}
 
 -(void)downloadContentPictures:(NSString *)url forImageView:(UIImageView *)imageView{
     
@@ -279,11 +342,6 @@ int margins;
             scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
         });
     });
-}
-
--(void)showLayoutForiPad:(NewsContent *)content
-{
-    
 }
 
 -(void)handleResponse:(NewsContent *)content
@@ -352,8 +410,8 @@ int margins;
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        NSString *result = [operation responseString];
-        [self handleResponse:result];
+//        NSString *result = [operation responseString];
+//        [self handleResponse:result];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         

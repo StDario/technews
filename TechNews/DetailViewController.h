@@ -37,6 +37,8 @@
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
+@property (nonatomic, assign) CGFloat lastContentOffset;
+
 - (IBAction)shareOnFacebook:(id)sender;
 
 - (IBAction)shareOnTwitter:(id)sender;
