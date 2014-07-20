@@ -38,7 +38,6 @@
 		BEAFFFFB1972BFB40026D2E3 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAFFFF71972BFB40026D2E3 /* facebook.png */; };
 		BEAFFFFC1972BFB40026D2E3 /* twitter-background.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAFFFF81972BFB40026D2E3 /* twitter-background.png */; };
 		BEEC5A6E19748F4F0071305D /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = BEEC5A6D19748F4F0071305D /* placeholder.png */; };
-		BEF50EF81969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = BEF50EF71969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg */; };
 		E3F1E1CDA23341D2B6D101CB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 549C8E7583A541E5923B31FC /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -97,7 +96,6 @@
 		BEAFFFF71972BFB40026D2E3 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		BEAFFFF81972BFB40026D2E3 /* twitter-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter-background.png"; sourceTree = "<group>"; };
 		BEEC5A6D19748F4F0071305D /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
-		BEF50EF71969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "bqggbbbcmaeatgb-jpg-large.jpeg"; path = "../../bqggbbbcmaeatgb-jpg-large.jpeg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,20 +172,13 @@
 		BE7F4DB51969C42B007DDDF3 /* TechNews */ = {
 			isa = PBXGroup;
 			children = (
-				BEEC5A6D19748F4F0071305D /* placeholder.png */,
-				BEAF00091972C6130026D2E3 /* twitter-background 2.png */,
-				BEAF000A1972C6130026D2E3 /* facebook-background 2.png */,
+				BE949F7A197C2141001BC2D6 /* Images */,
 				BE6D8D21196A004200B19C02 /* Custom Views */,
 				BE7F4DEF1969D3DC007DDDF3 /* Helpers */,
 				BE7F4DEB1969D0EF007DDDF3 /* Models */,
 				BE7F4DEA1969D0A3007DDDF3 /* Controllers */,
 				BE7F4DBE1969C42B007DDDF3 /* AppDelegate.h */,
 				BE7F4DBF1969C42B007DDDF3 /* AppDelegate.m */,
-				BEF50EF71969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg */,
-				BEAFFFF51972BFB40026D2E3 /* twitter.png */,
-				BEAFFFF61972BFB40026D2E3 /* facebook-background.png */,
-				BEAFFFF71972BFB40026D2E3 /* facebook.png */,
-				BEAFFFF81972BFB40026D2E3 /* twitter-background.png */,
 				BE7F4DCD1969C42B007DDDF3 /* Images.xcassets */,
 				BE7F4DB61969C42B007DDDF3 /* Supporting Files */,
 			);
@@ -256,6 +247,20 @@
 				BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */,
 			);
 			name = Helpers;
+			sourceTree = "<group>";
+		};
+		BE949F7A197C2141001BC2D6 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				BEAFFFF51972BFB40026D2E3 /* twitter.png */,
+				BEAFFFF61972BFB40026D2E3 /* facebook-background.png */,
+				BEAFFFF71972BFB40026D2E3 /* facebook.png */,
+				BEAFFFF81972BFB40026D2E3 /* twitter-background.png */,
+				BEAF00091972C6130026D2E3 /* twitter-background 2.png */,
+				BEAF000A1972C6130026D2E3 /* facebook-background 2.png */,
+				BEEC5A6D19748F4F0071305D /* placeholder.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -346,7 +351,6 @@
 				BEAF000B1972C6130026D2E3 /* twitter-background 2.png in Resources */,
 				BEAFFFFC1972BFB40026D2E3 /* twitter-background.png in Resources */,
 				BEAF000C1972C6130026D2E3 /* facebook-background 2.png in Resources */,
-				BEF50EF81969FB3E00817A38 /* bqggbbbcmaeatgb-jpg-large.jpeg in Resources */,
 				BE7F4DBA1969C42B007DDDF3 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

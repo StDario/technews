@@ -22,6 +22,8 @@ static NSString * const DownloadContentUrlString = @"http://skopjeparking.byetho
 
 @implementation DetailViewController
 
+bool flag = false;
+
 #pragma mark - Managing the detail item
 
 - (void)setNewsArticle:(id)newDetailItem
@@ -41,26 +43,51 @@ static NSString * const DownloadContentUrlString = @"http://skopjeparking.byetho
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.scrollView.delegate = self;
-    self.scrollView.scrollEnabled = YES;
-    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//    self.scrollView.delegate = self;
+//    self.scrollView.scrollEnabled = YES;
+//    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
--(void)setSocialButtons
+-(void)setSocialButtons1
 {
     NSString *path = [[NSBundle mainBundle] pathForResource: @"twitter" ofType: @"png"];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile: path];
     [self.btnTwitter setImage:image forState:UIControlStateNormal];
-    path = [[NSBundle mainBundle] pathForResource: @"twitter-background 2" ofType: @"png"];
+    path = [[NSBundle mainBundle] pathForResource: @"twitter-background" ofType: @"png"];
     image = [[UIImage alloc] initWithContentsOfFile: path];
     [self.btnTwitter setImage:image forState:UIControlStateHighlighted];
     
     path = [[NSBundle mainBundle] pathForResource: @"facebook" ofType: @"png"];
     image = [[UIImage alloc] initWithContentsOfFile: path];
     [self.btnFacebook setImage:image forState:UIControlStateNormal];
-    path = [[NSBundle mainBundle] pathForResource: @"facebook-background 2" ofType: @"png"];
+    path = [[NSBundle mainBundle] pathForResource: @"facebook-background" ofType: @"png"];
     image = [[UIImage alloc] initWithContentsOfFile: path];
     [self.btnFacebook setImage:image forState:UIControlStateHighlighted];
+}
+
+-(void)setSocialButtons:(UIButton *)btnTwitter Facebook :(UIButton *)btnFacebook
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"twitter" ofType: @"png"];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile: path];
+    [btnTwitter setImage:image forState:UIControlStateNormal];
+    path = [[NSBundle mainBundle] pathForResource: @"twitter-background" ofType: @"png"];
+    image = [[UIImage alloc] initWithContentsOfFile: path];
+    [btnTwitter setImage:image forState:UIControlStateHighlighted];
+    
+    path = [[NSBundle mainBundle] pathForResource: @"facebook" ofType: @"png"];
+    image = [[UIImage alloc] initWithContentsOfFile: path];
+    [btnFacebook setImage:image forState:UIControlStateNormal];
+    path = [[NSBundle mainBundle] pathForResource: @"facebook-background" ofType: @"png"];
+    image = [[UIImage alloc] initWithContentsOfFile: path];
+    [btnFacebook setImage:image forState:UIControlStateHighlighted];
+    
+    [btnTwitter addTarget:self
+                 action:@selector(shareOnTwitter:)
+       forControlEvents:UIControlEventTouchUpInside];
+    
+    [btnFacebook addTarget:self
+                 action:@selector(shareOnFacebook:)
+       forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)configureView
@@ -82,14 +109,12 @@ static NSString * const DownloadContentUrlString = @"http://skopjeparking.byetho
 //    }
     //[self downloadArticleContent];
     [self downloadNewsArticleContent];
-    [self setSocialButtons];
-    self.articleTitle.text =_newsArticle.title;
-    self.author.text = _newsArticle.author;
-    self.publishDate.text = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
-                                                                                   dateStyle:NSDateFormatterShortStyle
-                                                                                   timeStyle:NSDateFormatterFullStyle];
-    
-    
+    //[self setSocialButtons];
+    //self.articleTitle.text =_newsArticle.title;
+    //self.author.text = _newsArticle.author;
+    //self.publishDate.text = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
+                                                                                   //dateStyle:NSDateFormatterShortStyle
+                                                                                   //timeStyle:NSDateFormatterFullStyle]
 }
 
 -(void)downloadPicture:(NSString *)url forImageView:(UIImageView *)imageView{
@@ -112,16 +137,90 @@ static NSString * const DownloadContentUrlString = @"http://skopjeparking.byetho
 
 -(void)showLayoutForiPhone:(NewsContent *)content
 {
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    CGSize screenSize = self.view.frame.size;
+    int scrollHeight = 500;
+    int margins = 20;
+    int nextY = 0;
+    int titleHeight = 100;
+    int authorHeight = 20;
+    int authorWidht = 300;
+    int dateHeight = 20;
+    int dateWidth = 200;
+    int sourceNameHeight = 20;
+    int sourceNameWidth = 100;
+    int sourceImageHeight = 30;
+    int sourceImageWidth = 30;
+    int socialButtonHeight = 40;
+    int socialButtonWidth = 40;
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 70, 300, 1000)];
-    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0,0, 300, 500)];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, nextY, screenSize.width - margins, titleHeight)];
+    title.font = [UIFont fontWithName:@"HelveticaNeue" size:22];
+    title.lineBreakMode = NSLineBreakByWordWrapping;
+    title.numberOfLines = 0;
+    title.text = _newsArticle.title;
+    scrollHeight += titleHeight;
+    nextY += titleHeight + 30;
+    
+    UILabel *author = [[UILabel alloc] initWithFrame:CGRectMake(screenSize.width - margins - authorWidht, nextY, authorWidht, authorHeight)];
+    author.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    author.text = _newsArticle.author;
+    author.textAlignment = NSTextAlignmentRight;
+    
+    UILabel *sourceName = [[UILabel alloc] initWithFrame:CGRectMake(0, nextY, sourceNameWidth, sourceNameHeight)];
+    sourceName.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    sourceName.text = _newsArticle.sourceName;
+
+    
+    scrollHeight += authorHeight;
+    nextY += authorHeight;
+    
+    UILabel *date = [[UILabel alloc] initWithFrame:CGRectMake(screenSize.width - margins - dateWidth, nextY, dateWidth, dateHeight)];
+    date.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    NSString *artDate = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
+                                                       dateStyle:NSDateFormatterMediumStyle
+                                                       timeStyle:0];
+    date.text = artDate;
+    date.textAlignment = NSTextAlignmentRight;
+    
+    
+    
+    UIImageView *sourceImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, nextY, sourceImageWidth, sourceImageHeight)];
+    [self downloadPicture:_newsArticle.sourceImage forImageView:sourceImage];
+
+    
+    scrollHeight += dateHeight;
+    nextY += dateHeight;
+    
+    UIButton *btnTwitter = [[UIButton alloc] initWithFrame:CGRectMake(screenSize.width - margins - 2 * socialButtonWidth - 10, nextY, socialButtonWidth, socialButtonHeight)];
+    UIButton *btnFacebook = [[UIButton alloc] initWithFrame:CGRectMake(screenSize.width - margins - socialButtonWidth, nextY, socialButtonWidth, socialButtonHeight)];
+    
+    [self setSocialButtons:btnTwitter Facebook:btnFacebook];
+    
+    scrollHeight += socialButtonHeight;
+    nextY += socialButtonHeight;
+    
+    scrollHeight += 500;
+    UILabel *textView = [[UILabel alloc] initWithFrame:CGRectMake(0, nextY, screenSize.width - margins, 700)];
     textView.text = content.text;
+    textView.lineBreakMode = NSLineBreakByWordWrapping;
+    textView.numberOfLines = 0;
+    //textView.editable = false;
     UIFont *font = [UIFont fontWithName:@"HelveticaNeue" size:18];
     
     textView.font = font;
     
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 70, screenSize.width, screenSize.height)];
+    scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
+    scrollView.delegate = self;
+    scrollView.scrollEnabled = YES;
+    [scrollView addSubview:title];
+    [scrollView addSubview:author];
+    [scrollView addSubview:date];
+    [scrollView addSubview:sourceName];
+    [scrollView addSubview:sourceImage];
     [scrollView addSubview:textView];
+    [scrollView addSubview:btnFacebook];
+    [scrollView addSubview:btnTwitter];
     [self.view addSubview:scrollView];
 }
 
@@ -216,6 +315,11 @@ static NSString * const DownloadContentUrlString = @"http://skopjeparking.byetho
 
 - (void)viewDidLoad
 {
+    if(flag == false)
+        flag = true;
+    else
+        return;
+    
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
