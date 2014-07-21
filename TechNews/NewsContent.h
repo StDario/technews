@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NewsContent : NSObject
+@interface NewsContent : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSArray *images;
 @property (nonatomic, strong) NSArray *videos;

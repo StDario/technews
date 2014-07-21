@@ -9,6 +9,7 @@
 #import "DetailViewController.h"
 #import <Social/Social.h>
 #import "NewsContent.h"
+#import "SavedArticlesHelper.h"
 
 @interface DetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -61,23 +62,6 @@ int margins;
 //    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
--(void)setSocialButtons1
-{
-    NSString *path = [[NSBundle mainBundle] pathForResource: @"twitter" ofType: @"png"];
-    UIImage *image = [[UIImage alloc] initWithContentsOfFile: path];
-    [self.btnTwitter setImage:image forState:UIControlStateNormal];
-    path = [[NSBundle mainBundle] pathForResource: @"twitter-background" ofType: @"png"];
-    image = [[UIImage alloc] initWithContentsOfFile: path];
-    [self.btnTwitter setImage:image forState:UIControlStateHighlighted];
-    
-    path = [[NSBundle mainBundle] pathForResource: @"facebook" ofType: @"png"];
-    image = [[UIImage alloc] initWithContentsOfFile: path];
-    [self.btnFacebook setImage:image forState:UIControlStateNormal];
-    path = [[NSBundle mainBundle] pathForResource: @"facebook-background" ofType: @"png"];
-    image = [[UIImage alloc] initWithContentsOfFile: path];
-    [self.btnFacebook setImage:image forState:UIControlStateHighlighted];
-}
-
 -(void)setSocialButtons:(UIButton *)btnTwitter Facebook :(UIButton *)btnFacebook
 {
     NSString *path = [[NSBundle mainBundle] pathForResource: @"twitter" ofType: @"png"];
@@ -122,6 +106,7 @@ int margins;
 //    }
     //[self downloadArticleContent];
     [self downloadNewsArticleContent];
+    [self setNavigationBarButtonRight];
     //[self setSocialButtons];
     //self.articleTitle.text =_newsArticle.title;
     //self.author.text = _newsArticle.author;
@@ -535,28 +520,19 @@ int margins;
         if(scrollDirection == ScrollDirectionUp)
         {
             [self.navigationController setNavigationBarHidden: NO animated:YES];
+            [UIView animateWithDuration:0.25 animations:^{
+                scrollView.frame = CGRectMake(10, 70, screenSize.width, screenSize.height);
+            }];
         }
         else if(self.lastContentOffset > 0)
         {
             [self.navigationController setNavigationBarHidden: YES animated:YES];
+            [UIView animateWithDuration:0.25 animations:^{
+                scrollView.frame = CGRectMake(10, 30, screenSize.width, screenSize.height);
+            }];
         }
     }
 }
-
-//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-//{
-//    CGPoint translation = [scrollView.panGestureRecognizer translationInView:scrollView.superview];
-//    
-//    if(translation.y < 0)
-//    {
-//        // react to dragging down
-//        [self.navigationController setNavigationBarHidden: YES animated:YES];
-//    } else
-//    {
-//        // react to dragging up
-//        [self.navigationController setNavigationBarHidden:NO animated:YES];
-//    }
-//}
 
 -(void)handleResponse:(NewsContent *)content
 {
@@ -644,6 +620,11 @@ int margins;
     [operation start];
 }
 
+-(void)saveArticle
+{
+    [SavedArticlesHelper addArticle:_newsArticle];
+}
+
 - (void)viewDidLoad
 {
     if(flag == false)
@@ -655,6 +636,15 @@ int margins;
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
     self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
+    
+}
+
+-(void)setNavigationBarButtonRight
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"plus-32" ofType: @"png"];
+    UIImage *image = [[UIImage alloc] initWithContentsOfFile: path];
+    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(saveArticle)];
+    [self.navigationItem setRightBarButtonItem:barButton];
 }
 
 -(void)removeSubviewsFromScrollView

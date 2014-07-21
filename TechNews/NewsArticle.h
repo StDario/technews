@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NewsArticle : NSObject
+@interface NewsArticle : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *link;

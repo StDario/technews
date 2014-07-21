@@ -11,6 +11,9 @@
 		BE6D8D28196B0E2800B19C02 /* CustomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6D8D27196B0E2800B19C02 /* CustomTableViewCell.m */; };
 		BE6D8D2B196B11B600B19C02 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6D8D2A196B11B600B19C02 /* ImageCache.m */; };
 		BE6E577519785EF1002BB30D /* NewsContent.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6E577419785EF1002BB30D /* NewsContent.m */; };
+		BE75F221197D351A00C01691 /* plus-50.png in Resources */ = {isa = PBXBuildFile; fileRef = BE75F220197D351A00C01691 /* plus-50.png */; };
+		BE75F223197D37DA00C01691 /* plus-32.png in Resources */ = {isa = PBXBuildFile; fileRef = BE75F222197D37DA00C01691 /* plus-32.png */; };
+		BE75F226197D43B600C01691 /* SavedArticlesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BE75F225197D43B600C01691 /* SavedArticlesHelper.m */; };
 		BE7F4DB01969C42B007DDDF3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE7F4DAF1969C42B007DDDF3 /* Foundation.framework */; };
 		BE7F4DB21969C42B007DDDF3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE7F4DB11969C42B007DDDF3 /* CoreGraphics.framework */; };
 		BE7F4DB41969C42B007DDDF3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE7F4DB31969C42B007DDDF3 /* UIKit.framework */; };
@@ -61,6 +64,10 @@
 		BE6D8D2A196B11B600B19C02 /* ImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCache.m; sourceTree = "<group>"; };
 		BE6E577319785EF1002BB30D /* NewsContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsContent.h; sourceTree = "<group>"; };
 		BE6E577419785EF1002BB30D /* NewsContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsContent.m; sourceTree = "<group>"; };
+		BE75F220197D351A00C01691 /* plus-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-50.png"; sourceTree = "<group>"; };
+		BE75F222197D37DA00C01691 /* plus-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-32.png"; sourceTree = "<group>"; };
+		BE75F224197D43B600C01691 /* SavedArticlesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedArticlesHelper.h; sourceTree = "<group>"; };
+		BE75F225197D43B600C01691 /* SavedArticlesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedArticlesHelper.m; sourceTree = "<group>"; };
 		BE7F4DAC1969C42B007DDDF3 /* TechNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TechNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE7F4DAF1969C42B007DDDF3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BE7F4DB11969C42B007DDDF3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -245,6 +252,8 @@
 				BE6D8D2A196B11B600B19C02 /* ImageCache.m */,
 				BE7F4DF01969D44A007DDDF3 /* DownloadHelper.h */,
 				BE7F4DF11969D44A007DDDF3 /* DownloadHelper.m */,
+				BE75F224197D43B600C01691 /* SavedArticlesHelper.h */,
+				BE75F225197D43B600C01691 /* SavedArticlesHelper.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -252,6 +261,8 @@
 		BE949F7A197C2141001BC2D6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				BE75F222197D37DA00C01691 /* plus-32.png */,
+				BE75F220197D351A00C01691 /* plus-50.png */,
 				BEAFFFF51972BFB40026D2E3 /* twitter.png */,
 				BEAFFFF61972BFB40026D2E3 /* facebook-background.png */,
 				BEAFFFF71972BFB40026D2E3 /* facebook.png */,
@@ -342,11 +353,13 @@
 			files = (
 				BEAFFFF91972BFB40026D2E3 /* twitter.png in Resources */,
 				BEAFFFFA1972BFB40026D2E3 /* facebook-background.png in Resources */,
+				BE75F223197D37DA00C01691 /* plus-32.png in Resources */,
 				BE7F4DC61969C42B007DDDF3 /* Main_iPad.storyboard in Resources */,
 				BEEC5A6E19748F4F0071305D /* placeholder.png in Resources */,
 				BE7F4DCE1969C42B007DDDF3 /* Images.xcassets in Resources */,
 				BEAFFFFB1972BFB40026D2E3 /* facebook.png in Resources */,
 				BE6D8D25196B0CA100B19C02 /* CustomTableViewCell.xib in Resources */,
+				BE75F221197D351A00C01691 /* plus-50.png in Resources */,
 				BE7F4DC31969C42B007DDDF3 /* Main_iPhone.storyboard in Resources */,
 				BEAF000B1972C6130026D2E3 /* twitter-background 2.png in Resources */,
 				BEAFFFFC1972BFB40026D2E3 /* twitter-background.png in Resources */,
@@ -405,6 +418,7 @@
 			files = (
 				BE7F4DC01969C42B007DDDF3 /* AppDelegate.m in Sources */,
 				BE6D8D28196B0E2800B19C02 /* CustomTableViewCell.m in Sources */,
+				BE75F226197D43B600C01691 /* SavedArticlesHelper.m in Sources */,
 				BE7F4DC91969C42B007DDDF3 /* MasterViewController.m in Sources */,
 				BE6E577519785EF1002BB30D /* NewsContent.m in Sources */,
 				BE7F4DBC1969C42B007DDDF3 /* main.m in Sources */,
