@@ -123,7 +123,36 @@ int page = 1;
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 219;
+    return 252;
+}
+
+-(UIImage *)changeImage:(UIImage *)image withStartColor:(UIColor *)startColor withEndColor:(UIColor *)endColor
+{
+    CGFloat scale = image.scale;
+    UIGraphicsBeginImageContext(CGSizeMake(image.size.width * scale, image.size.height * scale));
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(context, 0, image.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    
+    CGContextSetBlendMode(context, kCGBlendModeMultiply);
+    CGRect rect = CGRectMake(0, 0, image.size.width * scale, image.size.height * scale);
+    CGContextDrawImage(context, rect, image.CGImage);
+    
+    // Create gradient
+    
+    
+    NSArray *colors = [NSArray arrayWithObjects:(id)startColor.CGColor, (id)endColor.CGColor, nil];
+    CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+    CGGradientRef gradient = CGGradientCreateWithColors(space, (CFArrayRef)colors, NULL);
+    
+    // Apply gradient
+    
+    CGContextClipToMask(context, rect, image.CGImage);
+    CGContextDrawLinearGradient(context, gradient, CGPointMake(0,0), CGPointMake(0,image.size.height * scale), 0);
+    UIImage *gradientImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return gradientImage;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -136,6 +165,7 @@ int page = 1;
     
     NSString *path = [[NSBundle mainBundle] pathForResource: @"placeholder" ofType: @"png"];
     [cell updateImage:[[UIImage alloc] initWithContentsOfFile: path]];
+    
     
     
     if([[ImageCache sharedImageCache] DoesExist:article.title]){
@@ -157,7 +187,9 @@ int page = 1;
                         [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
                         UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
                         UIGraphicsEndImageContext();
+                        newImage = [self changeImage:newImage withStartColor:[UIColor blackColor] withEndColor:[UIColor whiteColor]];
                         [cell updateImage:newImage];
+                        
                         [[ImageCache sharedImageCache] AddImageReference:article.title AddImage:newImage];
                     });
                 }

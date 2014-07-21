@@ -221,7 +221,7 @@ int margins;
     int nextX = 10;
     int nextText = 0;
     int textAdded = textLength / charsPerSection + 1;
-    int videosAdded = content.videos.count;
+    //int videosAdded = content.videos.count;
     int imagesAdded = content.images.count;
     int nextYFirstColumn = nextY;
     int nextYSecondColumn = nextY;

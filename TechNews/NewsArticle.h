@@ -18,6 +18,9 @@
 @property (nonatomic, strong) NSString *sourceName;
 @property (nonatomic, strong) NSString *sourceImage;
 @property (nonatomic, strong) NSString *file;
+@property (nonatomic, strong) NSString *textEntryId;
+@property (nonatomic, strong) NSString *concept;
+@property (nonatomic, strong) NSMutableArray *tags;
 
 -(void)initWithDictionary:(NSDictionary *)dict;
 

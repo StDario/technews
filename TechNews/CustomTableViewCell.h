@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *imageLoader;
 @property (nonatomic, weak) IBOutlet UIView *content;
 @property (nonatomic, weak) IBOutlet UILabel *timeAgo;
+@property (nonatomic, readwrite) int shadowAdded;
+@property (nonatomic, weak) IBOutlet UIImageView *sourceImage;
 
 - (void)initCell;
 - (void)clearCell;
