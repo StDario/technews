@@ -10,11 +10,13 @@
 #import "NewsArticle.h"
 #import "CustomTableViewCell.h"
 #import "ImageCache.h"
+#import "SavedArticlesHelper.h"
 
 static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/technews.php?page=";
 static NSString * const DownloadImageUrlString = @"http://skopjeparking.byethost7.com/imageScaller.php?url=";
 
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+bool showingSavedArticles = false;
 
 #import "DetailViewController.h"
 
@@ -36,11 +38,47 @@ int page = 1;
     [super awakeFromNib];
 }
 
+-(void)loadSavedArticles
+{
+    NSMutableArray *articles = [SavedArticlesHelper loadArticleData];
+    [_objects removeAllObjects];
+    [_objects addObjectsFromArray:articles];
+    [self.tableView reloadData];
+    
+    [self showBarButtonLeft];
+    self.navigationItem.rightBarButtonItem = nil;
+    showingSavedArticles = true;
+}
+
+-(void)loadNewArticles
+{
+    [_objects removeAllObjects];
+    [self downloadNewsArticles:1];
+    [self showBarButtonRight];
+    self.navigationItem.leftBarButtonItem = nil;
+    showingSavedArticles = false;
+}
+
+-(void)showBarButtonLeft
+{
+    UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(loadNewArticles)];
+    [back setTintColor:[UIColor whiteColor]];
+    self.navigationItem.leftBarButtonItem = back;
+}
+
+-(void)showBarButtonRight
+{
+    UIBarButtonItem *saved = [[UIBarButtonItem alloc] initWithTitle:@"Saved" style:UIBarButtonItemStylePlain target:self action:@selector(loadSavedArticles)];
+    [saved setTintColor:[UIColor whiteColor]];
+    self.navigationItem.rightBarButtonItem = saved;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    [self showBarButtonRight];
 
     //UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     //self.navigationItem.rightBarButtonItem = addButton;
@@ -49,7 +87,11 @@ int page = 1;
          forCellReuseIdentifier:@"Cell"];
     _objects = [[NSMutableArray alloc] init];
     self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
-    [self downloadNewsArticles:1];
+    
+    if(!showingSavedArticles)
+        [self downloadNewsArticles:1];
+    
+    //[SavedArticlesHelper removeAllArticles];
 }
 
 -(void)handleResponse:(NSArray *)articles
@@ -206,10 +248,11 @@ int page = 1;
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([indexPath isEqual:[NSIndexPath indexPathForRow:[self tableView:self.tableView numberOfRowsInSection:0] -1 inSection:0]]){
-        page += _objects.count;
-        [self downloadNewsArticles:page];
-    }
+    if(!showingSavedArticles)
+        if([indexPath isEqual:[NSIndexPath indexPathForRow:[self tableView:self.tableView numberOfRowsInSection:0] -1 inSection:0]]){
+            page += _objects.count;
+            [self downloadNewsArticles:page];
+        }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

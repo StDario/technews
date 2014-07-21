@@ -12,7 +12,7 @@
 
 @implementation SavedArticlesHelper
 
-+ (void)saveArticlesData:(NSMutableArray *)articles withContent:(NSMutableArray *)contents
++ (void)saveArticlesData:(NSMutableArray *)articles
 {
     
     NSMutableArray *articlesData = [NSMutableArray arrayWithCapacity:articles.count];
@@ -62,7 +62,13 @@
     }
     
     [articles addObject:article];
-    [self saveArticlesData:articles withContent:nil];
+    [self saveArticlesData:articles];
+}
+
++(void)removeAllArticles
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:@"articles"];
 }
 
 + (void)removeArticle:(NewsArticle *)article;

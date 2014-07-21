@@ -16,5 +16,6 @@
 + (void)addArticle:(NewsArticle *)article;
 + (void)removeArticle:(NewsArticle *)article;
 + (BOOL)isArticleSaved:(NewsArticle *)article;
++(void)removeAllArticles;
 
 @end

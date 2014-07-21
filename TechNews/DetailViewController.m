@@ -67,14 +67,14 @@ int margins;
     NSString *path = [[NSBundle mainBundle] pathForResource: @"twitter" ofType: @"png"];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile: path];
     [btnTwitter setImage:image forState:UIControlStateNormal];
-    path = [[NSBundle mainBundle] pathForResource: @"twitter-background" ofType: @"png"];
+    path = [[NSBundle mainBundle] pathForResource: @"twitter-background 2" ofType: @"png"];
     image = [[UIImage alloc] initWithContentsOfFile: path];
     [btnTwitter setImage:image forState:UIControlStateHighlighted];
     
     path = [[NSBundle mainBundle] pathForResource: @"facebook" ofType: @"png"];
     image = [[UIImage alloc] initWithContentsOfFile: path];
     [btnFacebook setImage:image forState:UIControlStateNormal];
-    path = [[NSBundle mainBundle] pathForResource: @"facebook-background" ofType: @"png"];
+    path = [[NSBundle mainBundle] pathForResource: @"facebook-background 2" ofType: @"png"];
     image = [[UIImage alloc] initWithContentsOfFile: path];
     [btnFacebook setImage:image forState:UIControlStateHighlighted];
     
@@ -85,6 +85,13 @@ int margins;
     [btnFacebook addTarget:self
                  action:@selector(shareOnFacebook:)
        forControlEvents:UIControlEventTouchUpInside];
+    
+//    [btnFacebook showsTouchWhenHighlighted];
+//    [btnTwitter showsTouchWhenHighlighted];
+//    
+//    scrollView.delaysContentTouches = NO;
+//    scrollView.canCancelContentTouches = NO;
+    
 }
 
 - (void)configureView
