@@ -150,7 +150,243 @@ int margins;
 
 -(void)showLayoutForiPad:(NewsContent *)content
 {
+    screenSize = self.view.frame.size;
+    scrollHeight = 500;
+    margins = 20;
+    nextY = 0;
+    int titleHeight = 200;
+    int authorHeight = 20;
+    int authorWidht = 300;
+    int dateHeight = 20;
+    int dateWidth = 200;
+    int sourceNameHeight = 20;
+    int sourceNameWidth = 100;
+    int sourceImageHeight = 30;
+    int sourceImageWidth = 30;
+    int socialButtonHeight = 40;
+    int socialButtonWidth = 40;
     
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, nextY, screenSize.width - margins, titleHeight)];
+    title.font = [UIFont fontWithName:@"HelveticaNeue" size:26];
+    title.lineBreakMode = NSLineBreakByWordWrapping;
+    title.numberOfLines = 0;
+    title.text = _newsArticle.title;
+    scrollHeight += titleHeight;
+    nextY += titleHeight + 30;
+    
+    UILabel *author = [[UILabel alloc] initWithFrame:CGRectMake(screenSize.width - margins - authorWidht, nextY, authorWidht, authorHeight)];
+    author.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    author.text = _newsArticle.author;
+    author.textAlignment = NSTextAlignmentRight;
+    
+    UILabel *sourceName = [[UILabel alloc] initWithFrame:CGRectMake(10, nextY, sourceNameWidth, sourceNameHeight)];
+    sourceName.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    sourceName.text = _newsArticle.sourceName;
+    
+    
+    scrollHeight += authorHeight;
+    nextY += authorHeight;
+    
+    UILabel *date = [[UILabel alloc] initWithFrame:CGRectMake(screenSize.width - margins - dateWidth, nextY, dateWidth, dateHeight)];
+    date.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+    NSString *artDate = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
+                                                       dateStyle:NSDateFormatterMediumStyle
+                                                       timeStyle:0];
+    date.text = artDate;
+    date.textAlignment = NSTextAlignmentRight;
+    
+    
+    
+    UIImageView *sourceImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, nextY, sourceImageWidth, sourceImageHeight)];
+    [self downloadPicture:_newsArticle.sourceImage forImageView:sourceImage];
+    
+    
+    scrollHeight += dateHeight;
+    nextY += dateHeight;
+    
+    UIButton *btnTwitter = [[UIButton alloc] initWithFrame:CGRectMake(screenSize.width - margins - 2 * socialButtonWidth - 10, nextY, socialButtonWidth, socialButtonHeight)];
+    UIButton *btnFacebook = [[UIButton alloc] initWithFrame:CGRectMake(screenSize.width - margins - socialButtonWidth, nextY, socialButtonWidth, socialButtonHeight)];
+    
+    [self setSocialButtons:btnTwitter Facebook:btnFacebook];
+    
+    scrollHeight += socialButtonHeight;
+    nextY += socialButtonHeight;
+    
+    CGSize maximumLabelSize = CGSizeMake((screenSize.width - margins) / 2, FLT_MAX);
+    
+    int textLength = content.text.length;
+    int charsPerSection = 500;
+    int sections = textLength / charsPerSection + 1 + content.images.count;
+    int newRow = 0;
+    int nextX = 10;
+    int nextText = 0;
+    int textAdded = textLength / charsPerSection + 1;
+    int videosAdded = content.videos.count;
+    int imagesAdded = content.images.count;
+    int nextYFirstColumn = nextY;
+    int nextYSecondColumn = nextY;
+    
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 50, screenSize.width, screenSize.height)];
+    scrollView.backgroundColor = [UIColor whiteColor];
+    
+    for(int i = 0; i < sections; i++){
+        
+        int heightToAdd = 0;
+        int r = arc4random() % 3;
+        
+        if(i == 0 || (textAdded != 0 && r == 0) || (imagesAdded == 0)){
+            if(newRow == 0)
+                nextY = nextYFirstColumn;
+            else
+                nextY = nextYSecondColumn;
+            
+            UILabel *textView = [[UILabel alloc] initWithFrame:CGRectMake(nextX, nextY, (screenSize.width - margins) / 2 - 5, 700)];
+            UIFont *font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+            textView.font = font;
+            
+            NSRange fileRange;
+            if(nextText * charsPerSection + charsPerSection > textLength)
+            {
+                fileRange = NSMakeRange(nextText * charsPerSection, textLength - nextText * charsPerSection);
+            }
+            else {
+                fileRange = NSMakeRange(nextText * charsPerSection, charsPerSection);
+            }
+            NSString *text = [content.text substringWithRange: fileRange];
+            
+            CGSize t = [text boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin
+                                       attributes:@{
+                                                    NSFontAttributeName : textView.font
+                                                    }
+                                          context:nil].size;
+            
+            CGRect frame = textView.frame;
+            frame.size.height = t.height;
+            textView.frame = frame;
+            textView.text = text;
+            textView.lineBreakMode = NSLineBreakByWordWrapping;
+            textView.numberOfLines = 0;
+            heightToAdd = t.height;
+            
+            nextText++;
+            [scrollView addSubview:textView];
+            textAdded--;
+        }
+        else if((r == 1 && imagesAdded != 0))
+        {
+            if(newRow == 0)
+                nextY = nextYFirstColumn;
+            else
+                nextY = nextYSecondColumn;
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(nextX, nextY, (screenSize.width - margins) / 2 - 5, 300)];
+            [self downloadContentPictures:content.images[content.images.count - imagesAdded] forImageView:imageView];
+            [scrollView addSubview:imageView];
+            heightToAdd = 300;
+            imagesAdded--;
+        }
+//        else
+//        {
+//            if(newRow == 0)
+//                nextY = nextYFirstColumn;
+//            else
+//                nextY = nextYSecondColumn;
+//            
+//            NSString *urlStr = [content.videos[content.videos.count - videosAdded] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+//            NSURL *url = [NSURL URLWithString:urlStr];
+//            NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//            UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(nextX, nextY, screenSize.width - margins / 2 - 5, 300)];
+//            [webView loadRequest:request];
+//            heightToAdd = 300;
+//            scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
+//            [scrollView addSubview:webView];
+//            videosAdded--;
+//        }
+        
+        if(newRow == 0){
+            nextX += (screenSize.width - margins) / 2 + 5;
+            newRow = 1;
+            nextYFirstColumn += heightToAdd + 20;
+        }
+        else
+        {
+            scrollHeight += heightToAdd;
+            nextX = 10;
+            newRow = 0;
+            nextYSecondColumn += heightToAdd + 20;
+        }
+        
+    }
+    
+    if(nextYFirstColumn > nextYSecondColumn)
+        nextY = nextYFirstColumn;
+    else
+        nextY = nextYSecondColumn;
+    
+    
+    
+    
+    
+    
+    scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
+    scrollView.delegate = self;
+    scrollView.scrollEnabled = YES;
+    [scrollView addSubview:title];
+    [scrollView addSubview:author];
+    [scrollView addSubview:date];
+    [scrollView addSubview:sourceName];
+    [scrollView addSubview:sourceImage];
+    [scrollView addSubview:btnFacebook];
+    [scrollView addSubview:btnTwitter];
+    
+    
+//    for(NSString *imageUrl in content.images)
+//    {
+//        UIImageView *imageView = [[UIImageView alloc] init];
+//        [self downloadContentPictures:imageUrl forImageView:imageView];
+//        [scrollView addSubview:imageView];
+//    }
+//    
+    for(NSString *videoUrl in content.videos)
+    {
+        NSString *urlStr = [videoUrl stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+        NSURL *url = [NSURL URLWithString:urlStr];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, nextY, screenSize.width - margins, 300)];
+        [webView loadRequest:request];
+        scrollHeight += 300;
+        nextY += 300;
+        scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
+        [scrollView addSubview:webView];
+    }
+    
+    
+    [self.view addSubview:scrollView];
+}
+
+-(void)downloadContentPictures:(NSString *)url forImageView:(UIImageView *)imageView{
+    
+    
+    dispatch_async(kBgQueue, ^{
+        NSData *imgData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIImage *image;
+            if (imgData) {
+                image = [[UIImage alloc] initWithData:imgData];
+            }
+            else {
+                image = nil;
+            }
+            
+            //CGRect frame = CGRectMake(0, nextY, screenSize.width - margins, image.size.height);
+            //imageView.frame = frame;
+            imageView.image = image;
+            //nextY += image.size.height;
+            //scrollHeight += image.size.height;
+            //frame = CGRectMake(10, 70, screenSize.width, scrollHeight);
+            //scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
+        });
+    });
 }
 
 -(void)showLayoutForiPhone:(NewsContent *)content
@@ -284,23 +520,26 @@ int margins;
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender
 {
-    ScrollDirection scrollDirection;
-    if (self.lastContentOffset > scrollView.contentOffset.y)
-        scrollDirection = ScrollDirectionUp;
-    else if (self.lastContentOffset < scrollView.contentOffset.y)
-        scrollDirection = ScrollDirectionDown;
-    
-    self.lastContentOffset = scrollView.contentOffset.y;
-    
-    // do whatever you need to with scrollDirection here.
-    
-    if(scrollDirection == ScrollDirectionUp)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
     {
-        [self.navigationController setNavigationBarHidden: NO animated:YES];
-    }
-    else if(self.lastContentOffset > 0)
-    {
-        [self.navigationController setNavigationBarHidden: YES animated:YES];
+        ScrollDirection scrollDirection;
+        if (self.lastContentOffset > scrollView.contentOffset.y)
+            scrollDirection = ScrollDirectionUp;
+        else if (self.lastContentOffset < scrollView.contentOffset.y)
+            scrollDirection = ScrollDirectionDown;
+        
+        self.lastContentOffset = scrollView.contentOffset.y;
+        
+        
+        
+        if(scrollDirection == ScrollDirectionUp)
+        {
+            [self.navigationController setNavigationBarHidden: NO animated:YES];
+        }
+        else if(self.lastContentOffset > 0)
+        {
+            [self.navigationController setNavigationBarHidden: YES animated:YES];
+        }
     }
 }
 
@@ -319,33 +558,10 @@ int margins;
 //    }
 //}
 
--(void)downloadContentPictures:(NSString *)url forImageView:(UIImageView *)imageView{
-    
-    
-    dispatch_async(kBgQueue, ^{
-        NSData *imgData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIImage *image;
-            if (imgData) {
-                image = [[UIImage alloc] initWithData:imgData];
-            }
-            else {
-                image = nil;
-            }
-            
-            CGRect frame = CGRectMake(0, nextY, screenSize.width - margins, image.size.height);
-            imageView.frame = frame;
-            imageView.image = image;
-            nextY += image.size.height;
-            scrollHeight += image.size.height;
-            //frame = CGRectMake(10, 70, screenSize.width, scrollHeight);
-            scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
-        });
-    });
-}
-
 -(void)handleResponse:(NewsContent *)content
 {
+    [self removeSubviewsFromScrollView];
+    
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
     {
         [self showLayoutForiPad:content];
@@ -439,7 +655,14 @@ int margins;
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
     self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
+}
 
+-(void)removeSubviewsFromScrollView
+{
+    NSArray *viewsToRemove = [scrollView subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
 }
 
 - (IBAction)shareOnFacebook:(id)sender;
