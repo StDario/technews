@@ -11,6 +11,8 @@
 #import "CustomTableViewCell.h"
 #import "ImageCache.h"
 #import "SavedArticlesHelper.h"
+#import <Social/Social.h>
+#import <Accounts/Accounts.h>
 
 static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/technews.php?page=";
 static NSString * const DownloadImageUrlString = @"http://skopjeparking.byethost7.com/imageScaller.php?url=";
@@ -36,6 +38,65 @@ int page = 1;
         self.preferredContentSize = CGSizeMake(320.0, 600.0);
     }
     [super awakeFromNib];
+}
+
+-(void)loadFacebookAccount
+{
+//    NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"CAAH0XFKBtlIBAKZCG9QmsdzZBDEm4OmmkHtvzYpFVu9Ub027umYg6j778jaDOhZAd9sjrPLJsE7xQNmMFr4m40ZABaRZCPtVTLZBaeNZC9RZBVuxiTkBGRUnG4KzZCc17DFeaekoHkp0wBZAm8vPY9kaZCGx0ndJy9jYWBZCtJ5PI3IMwZAUzBbOYtWvPmMc3UsJJ9twDnk5d368l4biIJAddVedl" forKey:@"access_token"];
+//    NSURL *url = [NSURL URLWithString:@"https://graph.facebook.com/me"];
+//    SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeFacebook
+//                                            requestMethod:SLRequestMethodGET
+//                                                      URL:url
+//                                               parameters:parameters];
+//    request.account = self.account;
+//    [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+//        NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+//        NSLog(@"Response data: %@", response);
+//        NSDictionary *myDictionary = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
+//        NSString *username = myDictionary[@"username"];
+//        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//        [defaults setObject:username forKey:@"facebookUsername"];
+//    }];
+    
+    ACAccountStore *accountStore = [[ACAccountStore alloc] init];
+    ACAccountType *facebookTypeAccount = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
+    
+    [accountStore requestAccessToAccountsWithType:facebookTypeAccount
+                                          options:@{ACFacebookAppIdKey: @"550152335111762"}
+                                        completion:^(BOOL granted, NSError *error) {
+                                            if(granted){
+                                                NSArray *accounts = [accountStore accountsWithAccountType:facebookTypeAccount];
+                                                ACAccount *facebookAccount = [accounts lastObject];
+                                                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                                [defaults setObject:facebookAccount.username forKey:@"facebookUsername"];
+                                                
+                                            }else{
+                                                // ouch
+                                                NSLog(@"Fail");
+                                                NSLog(@"Error: %@", error);
+                                            }
+                                        }];
+}
+
+-(void)loadTwitterAccount
+{
+    
+    ACAccountStore *accountStore = [[ACAccountStore alloc] init];
+    ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+    
+    [accountStore requestAccessToAccountsWithType:accountType options:nil completion:^(BOOL granted, NSError *error) {
+        if(granted) {
+            NSArray *accountsArray = [accountStore accountsWithAccountType:accountType];
+            
+            if ([accountsArray count] > 0) {
+                ACAccount *twitterAccount = [accountsArray objectAtIndex:0];
+                NSLog(@"%@",twitterAccount.username);
+                NSLog(@"%@",twitterAccount.accountType);
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setObject:twitterAccount.username forKey:@"twitterUsername"];
+            }
+        }
+    }];
 }
 
 -(void)loadSavedArticles
@@ -92,6 +153,9 @@ int page = 1;
         [self downloadNewsArticles:1];
     
     //[SavedArticlesHelper removeAllArticles];
+    
+    [self loadFacebookAccount];
+    //[self loadTwitterAccount];
 }
 
 -(void)handleResponse:(NSArray *)articles
