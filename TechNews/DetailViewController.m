@@ -224,7 +224,7 @@ int margins;
     for(int i = 0; i < sections; i++){
         
         int heightToAdd = 0;
-        int r = arc4random() % 3;
+        int r = arc4random() % 2;
         
         if(i == 0 || (textAdded != 0 && r == 0) || (imagesAdded == 0)){
             if(newRow == 0)
@@ -447,31 +447,72 @@ int margins;
     
     CGSize maximumLabelSize = CGSizeMake(screenSize.width - margins, FLT_MAX);
     
-    
-    
-    
-    UILabel *textView = [[UILabel alloc] initWithFrame:CGRectMake(0, nextY, screenSize.width - margins, 700)];
-    UIFont *font = [UIFont fontWithName:@"HelveticaNeue" size:18];
-    textView.font = font;
-    CGSize t = [content.text boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin
-        attributes:@{
-             NSFontAttributeName : textView.font
-             }
-            context:nil].size;
-    
-    //CGSize expectedLabelSize = [content.text sizeWithFont:textView.font constrainedToSize:maximumLabelSize lineBreakMode:textView.lineBreakMode];
-    CGRect frame = textView.frame;
-    frame.size.height = t.height;
-    textView.frame = frame;
-    textView.text = content.text;
-    textView.lineBreakMode = NSLineBreakByWordWrapping;
-    textView.numberOfLines = 0;
-    //textView.editable = false;
-    scrollHeight += t.height;
-    nextY += t.height;
+    int textLength = content.text.length;
+    int charsPerSection = 500;
+    int sections = textLength / charsPerSection + 1 + content.images.count;
+    int nextText = 0;
+    int textAdded = textLength / charsPerSection + 1;
+    //int videosAdded = content.videos.count;
+    int imagesAdded = content.images.count;
     
     
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 70, screenSize.width, screenSize.height)];
+    scrollView.backgroundColor = [UIColor whiteColor];
+    
+    for(int i = 0; i < sections; i++){
+        
+        int heightToAdd = 0;
+        int r = arc4random() % 2;
+        
+        if(i == 0 || (textAdded != 0 && r == 0) || (imagesAdded == 0)){
+            
+            UILabel *textView = [[UILabel alloc] initWithFrame:CGRectMake(5, nextY, screenSize.width - margins - 5, 700)];
+            UIFont *font = [UIFont fontWithName:@"HelveticaNeue" size:18];
+            textView.font = font;
+            
+            NSRange fileRange;
+            if(nextText * charsPerSection + charsPerSection > textLength)
+            {
+                fileRange = NSMakeRange(nextText * charsPerSection, textLength - nextText * charsPerSection);
+            }
+            else {
+                fileRange = NSMakeRange(nextText * charsPerSection, charsPerSection);
+            }
+            NSString *text = [content.text substringWithRange: fileRange];
+            
+            CGSize t = [text boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin
+                                       attributes:@{
+                                                    NSFontAttributeName : textView.font
+                                                    }
+                                          context:nil].size;
+            
+            CGRect frame = textView.frame;
+            frame.size.height = t.height;
+            textView.frame = frame;
+            textView.text = text;
+            textView.lineBreakMode = NSLineBreakByWordWrapping;
+            textView.numberOfLines = 0;
+            heightToAdd = t.height;
+            
+            nextText++;
+            [scrollView addSubview:textView];
+            textAdded--;
+        }
+        else if((r == 1 && imagesAdded != 0))
+        {
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, nextY, screenSize.width - margins - 5, 300)];
+            [self downloadContentPictures:content.images[content.images.count - imagesAdded] forImageView:imageView];
+            [scrollView addSubview:imageView];
+            heightToAdd = 300;
+            imagesAdded--;
+        }
+        
+        nextY += heightToAdd + 10;
+        scrollHeight += heightToAdd + 10;
+        
+    }
+    
+    
     scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
     scrollView.delegate = self;
     scrollView.scrollEnabled = YES;
@@ -480,17 +521,16 @@ int margins;
     [scrollView addSubview:date];
     [scrollView addSubview:sourceName];
     [scrollView addSubview:sourceImage];
-    [scrollView addSubview:textView];
     [scrollView addSubview:btnFacebook];
     [scrollView addSubview:btnTwitter];
     
     
-    for(NSString *imageUrl in content.images)
-    {
-        UIImageView *imageView = [[UIImageView alloc] init];
-        [self downloadContentPictures:imageUrl forImageView:imageView];
-        [scrollView addSubview:imageView];
-    }
+//    for(NSString *imageUrl in content.images)
+//    {
+//        UIImageView *imageView = [[UIImageView alloc] init];
+//        [self downloadContentPictures:imageUrl forImageView:imageView];
+//        [scrollView addSubview:imageView];
+//    }
     
     for(NSString *videoUrl in content.videos)
     {
