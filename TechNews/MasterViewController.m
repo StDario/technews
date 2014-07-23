@@ -105,6 +105,7 @@ int page = 1;
     [_objects removeAllObjects];
     [_objects addObjectsFromArray:articles];
     [self.tableView reloadData];
+    //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     
     [self showBarButtonLeft];
     self.navigationItem.rightBarButtonItem = nil;
@@ -118,6 +119,7 @@ int page = 1;
     [self showBarButtonRight];
     self.navigationItem.leftBarButtonItem = nil;
     showingSavedArticles = false;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationTop];
 }
 
 -(void)showBarButtonLeft
@@ -156,6 +158,9 @@ int page = 1;
     
     [self loadFacebookAccount];
     //[self loadTwitterAccount];
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
 }
 
 -(void)handleResponse:(NSArray *)articles
@@ -259,6 +264,17 @@ int page = 1;
     UIGraphicsEndImageContext();
     
     return gradientImage;
+}
+
+
+- (void)refresh:(UIRefreshControl *)refreshControl {
+    [refreshControl endRefreshing];
+    
+    if(self.navigationItem.leftBarButtonItem == nil)
+    {
+        [_objects removeAllObjects];
+        [self downloadNewsArticles:1];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

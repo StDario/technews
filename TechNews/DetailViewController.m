@@ -272,6 +272,8 @@ int margins;
                 nextY = nextYSecondColumn;
             
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(nextX, nextY, (screenSize.width - margins) / 2 - 5, 300)];
+            NSString *path = [[NSBundle mainBundle] pathForResource: @"placeholder" ofType: @"png"];
+            imageView.image = [[UIImage alloc] initWithContentsOfFile: path];
             [self downloadContentPictures:content.images[content.images.count - imagesAdded] forImageView:imageView];
             [scrollView addSubview:imageView];
             heightToAdd = 300;
@@ -323,6 +325,7 @@ int margins;
     scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
     scrollView.delegate = self;
     scrollView.scrollEnabled = YES;
+    scrollView.delaysContentTouches = NO;
     [scrollView addSubview:title];
     [scrollView addSubview:author];
     [scrollView addSubview:date];
@@ -501,6 +504,8 @@ int margins;
         else if((r == 1 && imagesAdded != 0))
         {
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, nextY, screenSize.width - margins - 5, 300)];
+            NSString *path = [[NSBundle mainBundle] pathForResource: @"placeholder" ofType: @"png"];
+            imageView.image = [[UIImage alloc] initWithContentsOfFile: path];
             [self downloadContentPictures:content.images[content.images.count - imagesAdded] forImageView:imageView];
             [scrollView addSubview:imageView];
             heightToAdd = 300;
@@ -516,6 +521,7 @@ int margins;
     scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
     scrollView.delegate = self;
     scrollView.scrollEnabled = YES;
+    scrollView.delaysContentTouches = NO;
     [scrollView addSubview:title];
     [scrollView addSubview:author];
     [scrollView addSubview:date];
