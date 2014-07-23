@@ -703,14 +703,6 @@ int margins;
         [self.navigationController popViewControllerAnimated:YES];
         return;
     }
-
-}
-
-- (BOOL)splitViewController:(UISplitViewController*)svc
-   shouldHideViewController:(UIViewController *)vc
-              inOrientation:(UIInterfaceOrientation)orientation
-{
-    return YES;
 }
 
 -(void)setNavigationBarButtonRight

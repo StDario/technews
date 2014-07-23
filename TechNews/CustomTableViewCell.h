@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "NewsArticle.h"
 
-@interface CustomTableViewCell : UITableViewCell
+@interface CustomTableViewCell : UICollectionViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel *title;
 @property (nonatomic, weak) IBOutlet UIImageView *backgroundImage;

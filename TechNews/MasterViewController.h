@@ -11,7 +11,7 @@
 
 @class DetailViewController;
 
-@interface MasterViewController : UITableViewController
+@interface MasterViewController : UICollectionViewController
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property (strong, nonatomic) ACAccount *account;

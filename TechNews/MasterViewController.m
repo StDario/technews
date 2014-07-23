@@ -104,7 +104,7 @@ int page = 1;
     NSMutableArray *articles = [SavedArticlesHelper loadArticleData];
     [_objects removeAllObjects];
     [_objects addObjectsFromArray:articles];
-    [self.tableView reloadData];
+    [self.collectionView reloadData];
     //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
     
     [self showBarButtonLeft];
@@ -119,7 +119,8 @@ int page = 1;
     [self showBarButtonRight];
     self.navigationItem.leftBarButtonItem = nil;
     showingSavedArticles = false;
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationTop];
+    //[self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationTop];
+    [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0] ];
 }
 
 -(void)showBarButtonLeft
@@ -146,11 +147,12 @@ int page = 1;
     //UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     //self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
-    [self.tableView registerNib:[UINib nibWithNibName:@"CustomTableViewCell" bundle:nil]
-         forCellReuseIdentifier:@"Cell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"CustomTableViewCell" bundle: nil] forCellWithReuseIdentifier:@"Cell"];
+//    [self.collectionView registerNib:[UINib nibWithNibName:@"CustomTableViewCell" bundle:nil]
+//         forCellReuseIdentifier:@"Cell"];
     _objects = [[NSMutableArray alloc] init];
     self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
-    
+    self.collectionView.backgroundColor = [self colorFromHexString:@"#CACED9"];
     if(!showingSavedArticles)
         [self downloadNewsArticles:1];
     
@@ -160,7 +162,7 @@ int page = 1;
     //[self loadTwitterAccount];
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
-    [self.tableView addSubview:refreshControl];
+    [self.collectionView addSubview:refreshControl];
 }
 
 -(void)handleResponse:(NSArray *)articles
@@ -172,7 +174,7 @@ int page = 1;
         [_objects addObject:newsArticle];
     }
     
-    [self.tableView reloadData];
+    [self.collectionView reloadData];
 }
 
 - (UIColor *)colorFromHexString:(NSString *)hexString {
@@ -222,12 +224,12 @@ int page = 1;
 
 #pragma mark - Table View
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+-(NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return _objects.count;
 }
@@ -285,9 +287,11 @@ int page = 1;
     return YES;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    CustomTableViewCell *cell = (CustomTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    CustomTableViewCell *cell = (CustomTableViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
+    //CustomTableViewCell *cell = (CustomTableViewCell *)[collectionView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
     NewsArticle *article = [_objects objectAtIndex:indexPath.row];
     [cell updateCellWithArticle:article];
@@ -331,17 +335,24 @@ int page = 1;
         });
     }
     
-    return cell;
-}
-
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
     if(!showingSavedArticles)
-        if([indexPath isEqual:[NSIndexPath indexPathForRow:[self tableView:self.tableView numberOfRowsInSection:0] -1 inSection:0]]){
+        if([indexPath isEqual:[NSIndexPath indexPathForRow:[self collectionView:self.collectionView numberOfItemsInSection:0] -1 inSection:0]]){
             page += _objects.count;
             [self downloadNewsArticles:page];
         }
+    
+    return cell;
 }
+
+//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if(!showingSavedArticles)
+//        
+//        if([indexPath isEqual:[NSIndexPath indexPathForRow:[self tableView:self.collectionView numberOfRowsInSection:0] -1 inSection:0]]){
+//            page += _objects.count;
+//            [self downloadNewsArticles:page];
+//        }
+//}
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -359,6 +370,18 @@ int page = 1;
 //    }
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [self performSegueWithIdentifier:@"showDetail" sender:nil];
+        return;
+        NewsArticle *object = _objects[indexPath.row];
+        self.detailViewController.newsArticle = object;
+    }
+    else {
+        [self performSegueWithIdentifier:@"showDetail" sender:nil];
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -376,7 +399,7 @@ int page = 1;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        NSIndexPath *indexPath = [self.collectionView indexPathsForSelectedItems][0];
         NewsArticle *object = _objects[indexPath.row];
         [[segue destinationViewController] setNewsArticle:object];
     }

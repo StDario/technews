@@ -20,14 +20,24 @@ double secondsInAnMinute = 60;
 
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+
+-(id)init
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
+    self = [super init];
+    if(self){
+        
     }
     return self;
 }
+
+//- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+//{
+//    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+//    if (self) {
+//        // Initialization code
+//    }
+//    return self;
+//}
 
 - (void)awakeFromNib
 {
@@ -70,16 +80,21 @@ double secondsInAnMinute = 60;
     return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+-(void)setSelected:(BOOL)selected
 {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+    [super setSelected:selected];
 }
+
+//- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+//{
+//    [super setSelected:selected animated:animated];
+//
+//    // Configure the view for the selected state
+//}
 
 - (void)initCell
 {
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    //self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 - (void)clearCell
