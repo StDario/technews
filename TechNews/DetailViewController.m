@@ -264,7 +264,7 @@ int margins;
             [scrollView addSubview:textView];
             textAdded--;
         }
-        else if((r == 1 && imagesAdded != 0))
+        else if((r == 1 && imagesAdded != 0) || textAdded == 0)
         {
             if(newRow == 0)
                 nextY = nextYFirstColumn;
@@ -501,7 +501,7 @@ int margins;
             [scrollView addSubview:textView];
             textAdded--;
         }
-        else if((r == 1 && imagesAdded != 0))
+        else if((r == 1 && imagesAdded != 0) || textAdded == 0)
         {
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(5, nextY, screenSize.width - margins - 5, 300)];
             NSString *path = [[NSBundle mainBundle] pathForResource: @"placeholder" ofType: @"png"];
@@ -690,6 +690,27 @@ int margins;
     [self configureView];
     self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
     
+    UISwipeGestureRecognizer *mSwipeUpRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showMaster)];
+    
+    [mSwipeUpRecognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
+    
+    [[self view] addGestureRecognizer:mSwipeUpRecognizer];
+}
+
+-(void)showMaster
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
+
+}
+
+- (BOOL)splitViewController:(UISplitViewController*)svc
+   shouldHideViewController:(UIViewController *)vc
+              inOrientation:(UIInterfaceOrientation)orientation
+{
+    return YES;
 }
 
 -(void)setNavigationBarButtonRight

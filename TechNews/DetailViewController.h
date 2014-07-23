@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "NewsArticle.h"
 
-@interface DetailViewController : UIViewController <UISplitViewControllerDelegate, UIScrollViewDelegate>
+@interface DetailViewController : UIViewController <UISplitViewControllerDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) NewsArticle *newsArticle;
 
