@@ -23,5 +23,6 @@
 - (void)clearCell;
 - (void)updateCellWithArticle:(NewsArticle *)article;
 - (void)updateImage:(UIImage *)image;
+-(void)updateTitleColor:(UIColor *)color;
 
 @end

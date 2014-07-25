@@ -19,6 +19,8 @@ static NSString * const DownloadImageUrlString = @"http://skopjeparking.byethost
 
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 bool showingSavedArticles = false;
+bool downloaded = false;
+int previousCount = 0;
 
 #import "DetailViewController.h"
 
@@ -33,10 +35,10 @@ int page = 1;
 
 - (void)awakeFromNib
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        self.clearsSelectionOnViewWillAppear = NO;
-        self.preferredContentSize = CGSizeMake(320.0, 600.0);
-    }
+//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+//        self.clearsSelectionOnViewWillAppear = NO;
+//        self.preferredContentSize = CGSizeMake(320.0, 600.0);
+//    }
     [super awakeFromNib];
 }
 
@@ -173,7 +175,7 @@ int page = 1;
         [newsArticle initWithDictionary:article];
         [_objects addObject:newsArticle];
     }
-    
+
     [self.collectionView reloadData];
 }
 
@@ -187,7 +189,13 @@ int page = 1;
 
 - (void)downloadNewsArticles:(int)page
 {
-    NSString *urlString = [NSString stringWithFormat:@"%@%i", DownloadUrlString, page];
+    NSString *device = nil;
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+        device = @"phone";
+    else
+        device = @"pad";
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@%i&device=%@", DownloadUrlString, page, device];
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
@@ -299,7 +307,7 @@ int page = 1;
     
     NSString *path = [[NSBundle mainBundle] pathForResource: @"placeholder" ofType: @"png"];
     [cell updateImage:[[UIImage alloc] initWithContentsOfFile: path]];
-    
+    [cell updateTitleColor:[UIColor blackColor]];
     
     
     if([[ImageCache sharedImageCache] DoesExist:article.title]){
@@ -323,23 +331,32 @@ int page = 1;
                         UIGraphicsEndImageContext();
                         newImage = [self changeImage:newImage withStartColor:[UIColor blackColor] withEndColor:[UIColor whiteColor]];
                         [cell updateImage:newImage];
-                        
+                        [cell updateTitleColor:[UIColor whiteColor]];
                         [[ImageCache sharedImageCache] AddImageReference:article.title AddImage:newImage];
+                        
                     });
                 }
                 else {
                     NSString *path = [[NSBundle mainBundle] pathForResource: @"placeholder" ofType: @"png"];
                     [cell updateImage:[[UIImage alloc] initWithContentsOfFile: path]];
+                    [cell updateTitleColor:[UIColor blackColor]];
                 }
             }
         });
     }
     
-    if(!showingSavedArticles)
+    if(!showingSavedArticles && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         if([indexPath isEqual:[NSIndexPath indexPathForRow:[self collectionView:self.collectionView numberOfItemsInSection:0] -1 inSection:0]]){
             page += _objects.count;
             [self downloadNewsArticles:page];
         }
+    }
+    else if(indexPath.row == _objects.count - 1){
+        page += _objects.count;
+        previousCount = _objects.count;
+        [self downloadNewsArticles:page];
+        downloaded = true;
+    }
     
     return cell;
 }

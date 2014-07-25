@@ -143,6 +143,11 @@ double secondsInAnMinute = 60;
 //    }
 }
 
+-(void)updateTitleColor:(UIColor *)color
+{
+    self.title.textColor = color;
+}
+
 - (void)addGradientToView:(UIView *)view
 {
     CAGradientLayer *gradient = [CAGradientLayer layer];
