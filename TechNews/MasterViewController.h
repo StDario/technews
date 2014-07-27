@@ -11,9 +11,10 @@
 
 @class DetailViewController;
 
-@interface MasterViewController : UICollectionViewController
+@interface MasterViewController : UICollectionViewController <UICollectionViewDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property (strong, nonatomic) ACAccount *account;
+@property (nonatomic, readwrite) int page;
 
 @end

@@ -699,10 +699,10 @@ int margins;
 
 -(void)showMaster
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    //if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         [self.navigationController popViewControllerAnimated:YES];
         return;
-    }
+    //}
 }
 
 -(void)setNavigationBarButtonRight

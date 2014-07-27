@@ -21,6 +21,7 @@ static NSString * const DownloadImageUrlString = @"http://skopjeparking.byethost
 bool showingSavedArticles = false;
 bool downloaded = false;
 int previousCount = 0;
+int articlesPerDownload = 12;
 
 #import "DetailViewController.h"
 
@@ -31,7 +32,8 @@ int previousCount = 0;
 
 @implementation MasterViewController
 
-int page = 1;
+@synthesize page;
+
 
 - (void)awakeFromNib
 {
@@ -118,6 +120,7 @@ int page = 1;
 {
     [_objects removeAllObjects];
     [self downloadNewsArticles:1];
+    page = 1;
     [self showBarButtonRight];
     self.navigationItem.leftBarButtonItem = nil;
     showingSavedArticles = false;
@@ -165,6 +168,8 @@ int page = 1;
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:refreshControl];
+    
+    page = 1;
 }
 
 -(void)handleResponse:(NSArray *)articles
@@ -286,6 +291,8 @@ int page = 1;
         [self downloadNewsArticles:1];
     }
     
+    page = 1;
+    
 }
 
 - (BOOL)splitViewController:(UISplitViewController*)svc
@@ -312,6 +319,7 @@ int page = 1;
     
     if([[ImageCache sharedImageCache] DoesExist:article.title]){
         [cell updateImage:[[ImageCache sharedImageCache] GetImage:article.title]];
+        [cell updateTitleColor:[UIColor whiteColor]];
     }
     else {
         dispatch_async(kBgQueue, ^{
@@ -345,21 +353,24 @@ int page = 1;
         });
     }
     
-    if(!showingSavedArticles && [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+    if(!showingSavedArticles){
         if([indexPath isEqual:[NSIndexPath indexPathForRow:[self collectionView:self.collectionView numberOfItemsInSection:0] -1 inSection:0]]){
-            page += _objects.count;
+            page += articlesPerDownload;
             [self downloadNewsArticles:page];
         }
+        else if(indexPath.row == _objects.count - 1){
+            page += articlesPerDownload;
+            previousCount = _objects.count;
+            [self downloadNewsArticles:page];
+            downloaded = true;
+        }
     }
-    else if(indexPath.row == _objects.count - 1){
-        page += _objects.count;
-        previousCount = _objects.count;
-        [self downloadNewsArticles:page];
-        downloaded = true;
-    }
+    
     
     return cell;
 }
+
+
 
 //-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 //{
