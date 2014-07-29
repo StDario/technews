@@ -366,7 +366,6 @@ int articlesPerDownload = 12;
         }
     }
     
-    
     return cell;
 }
 
