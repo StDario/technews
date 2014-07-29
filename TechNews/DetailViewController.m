@@ -639,10 +639,46 @@ int margins;
 
 -(void)saveArticle
 {
-    if([SavedArticlesHelper isArticleSaved:self.newsArticle])
+    if([SavedArticlesHelper isArticleSaved:self.newsArticle]){
         [SavedArticlesHelper removeArticle:self.newsArticle];
-    else
+        [self scheduleNotification:@"Removed"];
+    }
+    else{
         [SavedArticlesHelper addArticle:_newsArticle];
+        [self scheduleNotification:@"Saved"];
+    }
+    
+    [self setNavigationBarButtonRight];
+}
+
+-(void)scheduleNotification: (NSString *)message{
+    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+    if (localNotif == nil)
+        return;
+    
+    NSDate *now = [NSDate date];
+    //int daysToAdd = 14;
+    NSDate *notifyDate = [now dateByAddingTimeInterval:1];
+    
+    localNotif.fireDate = notifyDate;
+    localNotif.timeZone = [NSTimeZone defaultTimeZone];
+    
+	// Notification details
+    NSRange titleRange = NSMakeRange(0, 20);
+    
+    localNotif.alertBody = [NSString stringWithFormat:@"%@ article %@", message, [self.newsArticle.title substringWithRange:titleRange] ];
+	// Set the action button
+    localNotif.alertAction = @"View";
+    
+    localNotif.soundName = UILocalNotificationDefaultSoundName;
+    localNotif.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+    
+	// Specify custom data for the notification
+    //NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+    //localNotif.userInfo = infoDict;
+    
+	// Schedule the notification
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -653,7 +689,7 @@ int margins;
 -(void)setBarTintColor
 {
     if([self.newsArticle.sourceName isEqualToString:@"Engadget"])
-        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#5EC4DB"];
+        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#1FCBFF"];
     else if([self.newsArticle.sourceName isEqualToString:@"Wired"])
         self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#FF63F2"];
     else if([self.newsArticle.sourceName isEqualToString:@"The Verge"])
