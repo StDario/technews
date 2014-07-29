@@ -637,45 +637,29 @@ int margins;
     [operation start];
 }
 
--(void)downloadArticleContent
-{
-    int location = [_newsArticle.file rangeOfString:@"/" options:NSBackwardsSearch].location;
-    NSRange fileRange = NSMakeRange(location + 1, _newsArticle.file.length - location - 1);
-    NSString *file = [_newsArticle.file substringWithRange: fileRange];
-    NSString *urlString = [NSString stringWithFormat:@"%@sourceName=%@&file=%@", DownloadUrlString, _newsArticle.sourceName, file];
-    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:request];
-    
-    // 2
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    //operation.responseSerializer = [AFJSONResponseSerializer serializer];
-    operation.responseSerializer.acceptableContentTypes = [operation.responseSerializer.acceptableContentTypes setByAddingObject:@"text/html"];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-//        NSString *result = [operation responseString];
-//        [self handleResponse:result];
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        // 4
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Article Content"
-                                                            message:[error localizedDescription]
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Ok"
-                                                  otherButtonTitles:nil];
-        [alertView show];
-    }];
-    
-    // 5
-    [operation start];
-}
-
 -(void)saveArticle
 {
-    [SavedArticlesHelper addArticle:_newsArticle];
+    if([SavedArticlesHelper isArticleSaved:self.newsArticle])
+        [SavedArticlesHelper removeArticle:self.newsArticle];
+    else
+        [SavedArticlesHelper addArticle:_newsArticle];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self setBarTintColor];
+}
+
+-(void)setBarTintColor
+{
+    if([self.newsArticle.sourceName isEqualToString:@"Engadget"])
+        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#5EC4DB"];
+    else if([self.newsArticle.sourceName isEqualToString:@"Wired"])
+        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#FF63F2"];
+    else if([self.newsArticle.sourceName isEqualToString:@"The Verge"])
+        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#FF5E74"];
+    else if([self.newsArticle.sourceName isEqualToString:@"TechCrunch"])
+        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#6DCF13"];
 }
 
 - (void)viewDidLoad
@@ -688,7 +672,7 @@ int margins;
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self configureView];
-    self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
+    self.navigationController.navigationBar.tintColor = [self colorFromHexString:@"#FFFFFF"];
     
     UISwipeGestureRecognizer *mSwipeUpRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showMaster)];
     
@@ -705,10 +689,38 @@ int margins;
     //}
 }
 
+- (UIImage *)imageRotatedByDegrees:(UIImage*)oldImage deg:(CGFloat)degrees{
+    //Calculate the size of the rotated view's containing box for our drawing space
+    UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0,0,oldImage.size.width, oldImage.size.height)];
+    CGAffineTransform t = CGAffineTransformMakeRotation(degrees * M_PI / 180);
+    rotatedViewBox.transform = t;
+    CGSize rotatedSize = rotatedViewBox.frame.size;
+    
+    //Create the bitmap context
+    UIGraphicsBeginImageContext(rotatedSize);
+    CGContextRef bitmap = UIGraphicsGetCurrentContext();
+    
+    //Move the origin to the middle of the image so we will rotate and scale around the center.
+    CGContextTranslateCTM(bitmap, rotatedSize.width/2, rotatedSize.height/2);
+    
+    //Rotate the image context
+    CGContextRotateCTM(bitmap, (degrees * M_PI / 180));
+    
+    //Now, draw the rotated/scaled image into the context
+    CGContextScaleCTM(bitmap, 1.0, -1.0);
+    CGContextDrawImage(bitmap, CGRectMake(-oldImage.size.width / 2, -oldImage.size.height / 2, oldImage.size.width, oldImage.size.height), [oldImage CGImage]);
+    
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 -(void)setNavigationBarButtonRight
 {
     NSString *path = [[NSBundle mainBundle] pathForResource: @"plus-32" ofType: @"png"];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile: path];
+    if([SavedArticlesHelper isArticleSaved:self.newsArticle])
+        image = [self imageRotatedByDegrees:image deg:45];
     UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(saveArticle)];
     [self.navigationItem setRightBarButtonItem:barButton];
 }

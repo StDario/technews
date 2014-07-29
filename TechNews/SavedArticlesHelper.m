@@ -73,30 +73,30 @@
 
 + (void)removeArticle:(NewsArticle *)article;
 {
-//    NSMutableArray *places = [self loadPlaceData];
-//    if (!places) {
-//        return;
-//    }
-//    
-//    Place *placeToDelete;
-//    for (Place *p in places) {
-//        if ([p.name isEqualToString:place.name]) {
-//            placeToDelete = p;
-//            break;
-//        }
-//    }
-//    [places removeObject:placeToDelete];
-//    [self savePlaceData:places];
+    NSMutableArray *articles = [self loadArticleData];
+    if (!articles) {
+        return;
+    }
+    
+    NewsArticle *articleToDelete;
+    for (NewsArticle *n in articles) {
+        if ([n.title isEqualToString:article.title]) {
+            articleToDelete = n;
+            break;
+        }
+    }
+    [articles removeObject:articleToDelete];
+    [self saveArticlesData:articles];
 }
 
 + (BOOL)isArticleSaved:(NewsArticle *)article;
 {
-//    NSMutableArray *places = [self loadPlaceData];
-//    for (Place *p in places) {
-//        if ([p.name isEqualToString:place.name]) {
-//            return true;
-//        }
-//    }
+    NSMutableArray *articles = [self loadArticleData];
+    for (NewsArticle *n in articles) {
+        if ([n.title isEqualToString:article.title]) {
+            return true;
+        }
+    }
     return false;
 }
 

@@ -24,7 +24,7 @@
             <objects>
                 <viewController title="Detail" id="JEX-9P-axG" customClass="DetailViewController" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Detail" id="mOI-FS-AaM"/>
+                    <navigationItem key="navigationItem" id="mOI-FS-AaM"/>
                     <connections>
                         <outlet property="articleContent" destination="ozh-dN-Z9E" id="3iJ-J5-1tR"/>
                         <outlet property="articleImage" destination="DbR-IL-7ut" id="5pk-oM-8ht"/>

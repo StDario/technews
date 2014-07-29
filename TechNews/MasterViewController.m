@@ -114,6 +114,7 @@ int articlesPerDownload = 12;
     [self showBarButtonLeft];
     self.navigationItem.rightBarButtonItem = nil;
     showingSavedArticles = true;
+    self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#CF69FF"];
 }
 
 -(void)loadNewArticles
@@ -126,6 +127,7 @@ int articlesPerDownload = 12;
     showingSavedArticles = false;
     //[self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationTop];
     [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0] ];
+    self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#5EC4DB"];
 }
 
 -(void)showBarButtonLeft
@@ -192,7 +194,7 @@ int articlesPerDownload = 12;
     return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
-- (void)downloadNewsArticles:(int)page
+- (void)downloadNewsArticles:(int)pageNum
 {
     NSString *device = nil;
     if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
@@ -200,7 +202,7 @@ int articlesPerDownload = 12;
     else
         device = @"pad";
     
-    NSString *urlString = [NSString stringWithFormat:@"%@%i&device=%@", DownloadUrlString, page, device];
+    NSString *urlString = [NSString stringWithFormat:@"%@%i&device=%@", DownloadUrlString, pageNum, device];
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
@@ -216,7 +218,6 @@ int articlesPerDownload = 12;
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
-        // 4
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving news"
                                                             message:[error localizedDescription]
                                                            delegate:nil
@@ -395,6 +396,14 @@ int articlesPerDownload = 12;
 //    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
 //        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
 //    }
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    if(showingSavedArticles)
+        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#CF69FF"];
+    else
+        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#5EC4DB"];
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
