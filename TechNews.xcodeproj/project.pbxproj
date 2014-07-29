@@ -40,6 +40,7 @@
 		BEAFFFFA1972BFB40026D2E3 /* facebook-background.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAFFFF61972BFB40026D2E3 /* facebook-background.png */; };
 		BEAFFFFB1972BFB40026D2E3 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAFFFF71972BFB40026D2E3 /* facebook.png */; };
 		BEAFFFFC1972BFB40026D2E3 /* twitter-background.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAFFFF81972BFB40026D2E3 /* twitter-background.png */; };
+		BEBC16331987D12B00BAA98A /* UAProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEBC16321987D12B00BAA98A /* UAProgressView.m */; };
 		BEEC5A6E19748F4F0071305D /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = BEEC5A6D19748F4F0071305D /* placeholder.png */; };
 		E3F1E1CDA23341D2B6D101CB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 549C8E7583A541E5923B31FC /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -102,6 +103,8 @@
 		BEAFFFF61972BFB40026D2E3 /* facebook-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-background.png"; sourceTree = "<group>"; };
 		BEAFFFF71972BFB40026D2E3 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		BEAFFFF81972BFB40026D2E3 /* twitter-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter-background.png"; sourceTree = "<group>"; };
+		BEBC16311987D12B00BAA98A /* UAProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAProgressView.h; sourceTree = "<group>"; };
+		BEBC16321987D12B00BAA98A /* UAProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAProgressView.m; sourceTree = "<group>"; };
 		BEEC5A6D19748F4F0071305D /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -135,6 +138,8 @@
 		BE6D8D21196A004200B19C02 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				BEBC16311987D12B00BAA98A /* UAProgressView.h */,
+				BEBC16321987D12B00BAA98A /* UAProgressView.m */,
 				BE6D8D24196B0CA100B19C02 /* CustomTableViewCell.xib */,
 				BE6D8D26196B0E2800B19C02 /* CustomTableViewCell.h */,
 				BE6D8D27196B0E2800B19C02 /* CustomTableViewCell.m */,
@@ -426,6 +431,7 @@
 				BE7F4DCC1969C42B007DDDF3 /* DetailViewController.m in Sources */,
 				BE6D8D2B196B11B600B19C02 /* ImageCache.m in Sources */,
 				BE7F4DF21969D44A007DDDF3 /* DownloadHelper.m in Sources */,
+				BEBC16331987D12B00BAA98A /* UAProgressView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

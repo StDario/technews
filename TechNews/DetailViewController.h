@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "NewsArticle.h"
+#import "UAProgressView.h"
 
 @interface DetailViewController : UIViewController <UISplitViewControllerDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
@@ -38,6 +39,8 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (nonatomic, assign) CGFloat lastContentOffset;
+
+@property (nonatomic, weak) IBOutlet UAProgressView *progressView;
 
 - (IBAction)shareOnFacebook:(id)sender;
 

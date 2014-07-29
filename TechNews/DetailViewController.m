@@ -10,6 +10,7 @@
 #import <Social/Social.h>
 #import "NewsContent.h"
 #import "SavedArticlesHelper.h"
+#import "UAProgressView.h"
 
 @interface DetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -98,28 +99,69 @@ int margins;
 {
     // Update the user interface for the detail item.
 
-//    if (self.newsArticle) {
-//        self.detailDescriptionLabel.text = self.newsArticle.title;
-//        self.sourceName.text = self.newsArticle.sourceName;
-//        self.sourceName.text = _newsArticle.sourceName;
-//        [self downloadPicture:_newsArticle.sourceImage forImageView:self.sourceImage];
-//        self.articleTitle.text =_newsArticle.title;
-//        self.author.text = _newsArticle.author;
-//        self.publishDate.text = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
-//                                                                                       dateStyle:NSDateFormatterShortStyle
-//                                                                                       timeStyle:NSDateFormatterFullStyle];
-//        [self downloadPicture:_newsArticle.imageUrl forImageView:self.articleImage];
-//        [self downloadArticleContent];
-//    }
-    //[self downloadArticleContent];
+    
+    [self setCustomProgressView];
+    
     [self downloadNewsArticleContent];
+    
     [self setNavigationBarButtonRight];
-    //[self setSocialButtons];
-    //self.articleTitle.text =_newsArticle.title;
-    //self.author.text = _newsArticle.author;
-    //self.publishDate.text = [NSDateFormatter localizedStringFromDate:_newsArticle.publishDate
-                                                                                   //dateStyle:NSDateFormatterShortStyle
-                                                                                   //timeStyle:NSDateFormatterFullStyle]
+}
+
+-(void)addFillToProgress
+{
+    [self.progressView addFill];
+    [NSTimer scheduledTimerWithTimeInterval: 0.8 target: self
+                                   selector: @selector(removeFillFromProgress) userInfo: nil repeats: NO];
+}
+
+-(void)removeFillFromProgress
+{
+    [self.progressView removeFillAnimated:YES];
+}
+
+-(void)setCustomProgressView
+{
+    screenSize = self.view.frame.size;
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 50, screenSize.width, screenSize.height)];
+    scrollView.backgroundColor = [UIColor whiteColor];
+    scrollView.contentSize = CGSizeMake(screenSize.width, screenSize.height);
+    scrollView.delegate = self;
+    scrollView.scrollEnabled = YES;
+    scrollView.delaysContentTouches = NO;
+    
+    CGSize progressSize = CGSizeMake(120, 120);
+    UAProgressView *progress = [[UAProgressView alloc] initWithFrame:CGRectMake(screenSize.width / 2 - progressSize.width / 2, screenSize.height / 2 - progressSize.height / 2 - 50, progressSize.width, progressSize.height)];
+    
+    
+    progress.tintColor = [self getProgressColor];
+    
+    UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 90.0, 32.0)];
+    textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+    textLabel.textAlignment = NSTextAlignmentCenter;
+    textLabel.textColor = progress.tintColor;
+    textLabel.backgroundColor = [UIColor clearColor];
+    textLabel.text = @"Fetching";
+    progress.centralView = textLabel;
+    progress.borderWidth = 1.0;
+    progress.lineWidth = 1.0;
+    
+    [NSTimer scheduledTimerWithTimeInterval: 2 target: self
+                                   selector: @selector(addFillToProgress) userInfo: nil repeats: YES];
+    
+    [scrollView addSubview:progress];
+    progress.fillChangedBlock = ^(UAProgressView *progressView, BOOL filled, BOOL animated){
+		UIColor *color = (filled ? [UIColor whiteColor] : progressView.tintColor);
+		if (animated) {
+			[UIView animateWithDuration:0.8 animations:^{
+				((UILabel *)progressView.centralView).textColor = color;
+			}];
+		} else {
+			((UILabel *)progressView.centralView).textColor = color;
+		}
+	};
+    
+    self.progressView = progress;
+    [self.view addSubview:scrollView];
 }
 
 -(void)downloadPicture:(NSString *)url forImageView:(UIImageView *)imageView{
@@ -599,6 +641,8 @@ int margins;
     {
         [self showLayoutForiPhone:content];
     }
+    
+    self.navigationController.navigationBar.tintColor = [self colorFromHexString:@"#FFFFFF"];
 }
 
 -(void)downloadNewsArticleContent
@@ -686,10 +730,26 @@ int margins;
     [self setBarTintColor];
 }
 
+-(UIColor *)getProgressColor
+{
+    UIColor *color;
+    
+    if([self.newsArticle.sourceName isEqualToString:@"Engadget"])
+        color = [self colorFromHexString:@"#1797FF"];
+    else if([self.newsArticle.sourceName isEqualToString:@"Wired"])
+        color = [self colorFromHexString:@"#FF63F2"];
+    else if([self.newsArticle.sourceName isEqualToString:@"The Verge"])
+        color = [self colorFromHexString:@"#FF5E74"];
+    else if([self.newsArticle.sourceName isEqualToString:@"TechCrunch"])
+        color = [self colorFromHexString:@"#6DCF13"];
+    
+    return color;
+}
+
 -(void)setBarTintColor
 {
     if([self.newsArticle.sourceName isEqualToString:@"Engadget"])
-        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#1FCBFF"];
+        self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#1797FF"];
     else if([self.newsArticle.sourceName isEqualToString:@"Wired"])
         self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#FF63F2"];
     else if([self.newsArticle.sourceName isEqualToString:@"The Verge"])
