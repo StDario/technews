@@ -11,6 +11,7 @@
 #import "NewsContent.h"
 #import "SavedArticlesHelper.h"
 #import "UAProgressView.h"
+#import "ImageHelper.h"
 
 @interface DetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
@@ -59,9 +60,6 @@ int margins;
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-//    self.scrollView.delegate = self;
-//    self.scrollView.scrollEnabled = YES;
-//    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
 -(void)setSocialButtons:(UIButton *)btnTwitter Facebook :(UIButton *)btnFacebook
@@ -87,13 +85,6 @@ int margins;
     [btnFacebook addTarget:self
                  action:@selector(shareOnFacebook:)
        forControlEvents:UIControlEventTouchUpInside];
-    
-//    [btnFacebook showsTouchWhenHighlighted];
-//    [btnTwitter showsTouchWhenHighlighted];
-//    
-//    scrollView.delaysContentTouches = NO;
-//    scrollView.canCancelContentTouches = NO;
-    
 }
 
 - (void)configureView
@@ -376,23 +367,6 @@ int margins;
             heightToAdd = 300;
             imagesAdded--;
         }
-//        else
-//        {
-//            if(newRow == 0)
-//                nextY = nextYFirstColumn;
-//            else
-//                nextY = nextYSecondColumn;
-//            
-//            NSString *urlStr = [content.videos[content.videos.count - videosAdded] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-//            NSURL *url = [NSURL URLWithString:urlStr];
-//            NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//            UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(nextX, nextY, screenSize.width - margins / 2 - 5, 300)];
-//            [webView loadRequest:request];
-//            heightToAdd = 300;
-//            scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
-//            [scrollView addSubview:webView];
-//            videosAdded--;
-//        }
         
         if(newRow == 0){
             nextX += (screenSize.width - margins) / 2 + 5;
@@ -431,14 +405,7 @@ int margins;
     [scrollView addSubview:btnFacebook];
     [scrollView addSubview:btnTwitter];
     
-    
-//    for(NSString *imageUrl in content.images)
-//    {
-//        UIImageView *imageView = [[UIImageView alloc] init];
-//        [self downloadContentPictures:imageUrl forImageView:imageView];
-//        [scrollView addSubview:imageView];
-//    }
-//    
+ 
     for(NSString *videoUrl in content.videos)
     {
         NSString *urlStr = [videoUrl stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
@@ -469,14 +436,7 @@ int margins;
             else {
                 image = nil;
             }
-            
-            //CGRect frame = CGRectMake(0, nextY, screenSize.width - margins, image.size.height);
-            //imageView.frame = frame;
             imageView.image = image;
-            //nextY += image.size.height;
-            //scrollHeight += image.size.height;
-            //frame = CGRectMake(10, 70, screenSize.width, scrollHeight);
-            //scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
         });
     });
 }
@@ -656,14 +616,6 @@ int margins;
     [scrollView addSubview:sourceImage];
     [scrollView addSubview:btnFacebook];
     [scrollView addSubview:btnTwitter];
-    
-    
-//    for(NSString *imageUrl in content.images)
-//    {
-//        UIImageView *imageView = [[UIImageView alloc] init];
-//        [self downloadContentPictures:imageUrl forImageView:imageView];
-//        [scrollView addSubview:imageView];
-//    }
     
     for(NSString *videoUrl in content.videos)
     {
@@ -870,38 +822,12 @@ int margins;
     //}
 }
 
-- (UIImage *)imageRotatedByDegrees:(UIImage*)oldImage deg:(CGFloat)degrees{
-    //Calculate the size of the rotated view's containing box for our drawing space
-    UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0,0,oldImage.size.width, oldImage.size.height)];
-    CGAffineTransform t = CGAffineTransformMakeRotation(degrees * M_PI / 180);
-    rotatedViewBox.transform = t;
-    CGSize rotatedSize = rotatedViewBox.frame.size;
-    
-    //Create the bitmap context
-    UIGraphicsBeginImageContext(rotatedSize);
-    CGContextRef bitmap = UIGraphicsGetCurrentContext();
-    
-    //Move the origin to the middle of the image so we will rotate and scale around the center.
-    CGContextTranslateCTM(bitmap, rotatedSize.width/2, rotatedSize.height/2);
-    
-    //Rotate the image context
-    CGContextRotateCTM(bitmap, (degrees * M_PI / 180));
-    
-    //Now, draw the rotated/scaled image into the context
-    CGContextScaleCTM(bitmap, 1.0, -1.0);
-    CGContextDrawImage(bitmap, CGRectMake(-oldImage.size.width / 2, -oldImage.size.height / 2, oldImage.size.width, oldImage.size.height), [oldImage CGImage]);
-    
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-}
-
 -(void)setNavigationBarButtonRight
 {
     NSString *path = [[NSBundle mainBundle] pathForResource: @"plus-32" ofType: @"png"];
     UIImage *image = [[UIImage alloc] initWithContentsOfFile: path];
     if([SavedArticlesHelper isArticleSaved:self.newsArticle])
-        image = [self imageRotatedByDegrees:image deg:45];
+        image = [ImageHelper imageRotatedByDegrees:image deg:45];
     UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(saveArticle)];
     [self.navigationItem setRightBarButtonItem:barButton];
 }

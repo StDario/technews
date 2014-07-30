@@ -13,6 +13,7 @@
 #import "SavedArticlesHelper.h"
 #import <Social/Social.h>
 #import <Accounts/Accounts.h>
+#import "ImageHelper.h"
 
 static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/technews.php?page=";
 static NSString * const DownloadImageUrlString = @"http://skopjeparking.byethost7.com/imageScaller.php?url=";
@@ -37,31 +38,11 @@ int articlesPerDownload = 12;
 
 - (void)awakeFromNib
 {
-//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-//        self.clearsSelectionOnViewWillAppear = NO;
-//        self.preferredContentSize = CGSizeMake(320.0, 600.0);
-//    }
     [super awakeFromNib];
 }
 
 -(void)loadFacebookAccount
 {
-//    NSDictionary *parameters = [NSDictionary dictionaryWithObject:@"CAAH0XFKBtlIBAKZCG9QmsdzZBDEm4OmmkHtvzYpFVu9Ub027umYg6j778jaDOhZAd9sjrPLJsE7xQNmMFr4m40ZABaRZCPtVTLZBaeNZC9RZBVuxiTkBGRUnG4KzZCc17DFeaekoHkp0wBZAm8vPY9kaZCGx0ndJy9jYWBZCtJ5PI3IMwZAUzBbOYtWvPmMc3UsJJ9twDnk5d368l4biIJAddVedl" forKey:@"access_token"];
-//    NSURL *url = [NSURL URLWithString:@"https://graph.facebook.com/me"];
-//    SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeFacebook
-//                                            requestMethod:SLRequestMethodGET
-//                                                      URL:url
-//                                               parameters:parameters];
-//    request.account = self.account;
-//    [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
-//        NSString *response = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-//        NSLog(@"Response data: %@", response);
-//        NSDictionary *myDictionary = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
-//        NSString *username = myDictionary[@"username"];
-//        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//        [defaults setObject:username forKey:@"facebookUsername"];
-//    }];
-    
     ACAccountStore *accountStore = [[ACAccountStore alloc] init];
     ACAccountType *facebookTypeAccount = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
     
@@ -142,22 +123,13 @@ int articlesPerDownload = 12;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
     [self showBarButtonRight];
 
-    //UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    //self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     [self.collectionView registerNib:[UINib nibWithNibName:@"CustomTableViewCell" bundle: nil] forCellWithReuseIdentifier:@"Cell"];
-//    [self.collectionView registerNib:[UINib nibWithNibName:@"CustomTableViewCell" bundle:nil]
-//         forCellReuseIdentifier:@"Cell"];
     _objects = [[NSMutableArray alloc] init];
     self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
     self.collectionView.backgroundColor = [self colorFromHexString:@"#CACED9"];
-    
-    
-    //[SavedArticlesHelper removeAllArticles];
     
     [self loadFacebookAccount];
     [self loadTwitterAccount];
@@ -180,7 +152,6 @@ int articlesPerDownload = 12;
         [_objects addObject:newsArticle];
     }
 
-    NSLog([NSString stringWithFormat:@"%i", _objects.count]);
     [self.collectionView reloadData];
 }
 
@@ -211,7 +182,6 @@ int articlesPerDownload = 12;
     NSString *urlString = [NSString stringWithFormat:@"%@%i&twitterUsername=%@&facebookUsername=%@", DownloadUrlString, pageNum, twitterUsername, facebookUsername];
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    NSLog(urlString);
     
     // 2
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
@@ -260,36 +230,6 @@ int articlesPerDownload = 12;
     return 252;
 }
 
--(UIImage *)changeImage:(UIImage *)image withStartColor:(UIColor *)startColor withEndColor:(UIColor *)endColor
-{
-    CGFloat scale = image.scale;
-    UIGraphicsBeginImageContext(CGSizeMake(image.size.width * scale, image.size.height * scale));
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(context, 0, image.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
-    
-    CGContextSetBlendMode(context, kCGBlendModeMultiply);
-    CGRect rect = CGRectMake(0, 0, image.size.width * scale, image.size.height * scale);
-    CGContextDrawImage(context, rect, image.CGImage);
-    
-    // Create gradient
-    
-    
-    NSArray *colors = [NSArray arrayWithObjects:(id)startColor.CGColor, (id)endColor.CGColor, nil];
-    CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
-    CGGradientRef gradient = CGGradientCreateWithColors(space, (CFArrayRef)colors, NULL);
-    
-    // Apply gradient
-    
-    CGContextClipToMask(context, rect, image.CGImage);
-    CGContextDrawLinearGradient(context, gradient, CGPointMake(0,0), CGPointMake(0,image.size.height * scale), 0);
-    UIImage *gradientImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return gradientImage;
-}
-
-
 - (void)refresh:(UIRefreshControl *)refreshControl {
     [refreshControl endRefreshing];
     
@@ -314,7 +254,6 @@ int articlesPerDownload = 12;
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CustomTableViewCell *cell = (CustomTableViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
-    //CustomTableViewCell *cell = (CustomTableViewCell *)[collectionView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
     NewsArticle *article = [_objects objectAtIndex:indexPath.row];
     [cell updateCellWithArticle:article];
@@ -341,11 +280,8 @@ int articlesPerDownload = 12;
                         CGSize newSize;
                         newSize.height = 150;
                         newSize.width = 300;
-                        UIGraphicsBeginImageContext(newSize);
-                        [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
-                        UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
-                        UIGraphicsEndImageContext();
-                        newImage = [self changeImage:newImage withStartColor:[UIColor blackColor] withEndColor:[UIColor whiteColor]];
+                        UIImage* newImage = [ImageHelper scaleImage:image toSize:newSize];
+                        newImage = [ImageHelper changeImage:newImage withStartColor:[UIColor blackColor] withEndColor:[UIColor whiteColor]];
                         [cell updateImage:newImage];
                         [cell updateTitleColor:[UIColor whiteColor]];
                         [[ImageCache sharedImageCache] AddImageReference:article.title AddImage:newImage];
@@ -377,34 +313,6 @@ int articlesPerDownload = 12;
     return cell;
 }
 
-
-
-//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if(!showingSavedArticles)
-//        
-//        if([indexPath isEqual:[NSIndexPath indexPathForRow:[self tableView:self.collectionView numberOfRowsInSection:0] -1 inSection:0]]){
-//            page += _objects.count;
-//            [self downloadNewsArticles:page];
-//        }
-//}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-//    if (editingStyle == UITableViewCellEditingStyleDelete) {
-//        [_objects removeObjectAtIndex:indexPath.row];
-//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-//        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-//    }
-}
-
 -(void)viewWillAppear:(BOOL)animated
 {
     if(showingSavedArticles)
@@ -415,28 +323,7 @@ int articlesPerDownload = 12;
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        [self performSegueWithIdentifier:@"showDetail" sender:nil];
-        return;
-        NewsArticle *object = _objects[indexPath.row];
-        self.detailViewController.newsArticle = object;
-    }
-    else {
-        [self performSegueWithIdentifier:@"showDetail" sender:nil];
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        [self performSegueWithIdentifier:@"showDetail" sender:nil];
-        return;
-        NewsArticle *object = _objects[indexPath.row];
-        self.detailViewController.newsArticle = object;
-    }
-    else {
-        [self performSegueWithIdentifier:@"showDetail" sender:nil];
-    }
+    [self performSegueWithIdentifier:@"showDetail" sender:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

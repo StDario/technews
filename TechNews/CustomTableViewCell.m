@@ -107,40 +107,11 @@ double secondsInAnMinute = 60;
 - (void)updateImage:(UIImage *)image
 {
     [self.imageLoader stopAnimating];
-    self.backgroundImage.image = image;
+    //self.backgroundImage.image = image;
     
-//    if(self.shadowAdded == 0){
-//        UIView *dropshadowView = [[UIView alloc] init];
-//        dropshadowView.backgroundColor = [UIColor colorWithWhite:0.25 alpha:0.55];
-//        dropshadowView.frame = CGRectMake( 10.0f, 170.0f, 300.0f, 50.0f);
-//        [self.contentView addSubview:dropshadowView];
-//        
-//        CALayer *layer = dropshadowView.layer;
-//        layer.masksToBounds = NO;
-//        layer.shadowRadius = 5.0f;
-//        layer.shadowOpacity = 0.7f;
-//        layer.shadowOffset = CGSizeMake( 0.0f, 11.0f);
-//        layer.shouldRasterize = YES;
-//        layer.
-//        
-//        self.shadowAdded = 1;
-//        
-//        [self.contentView bringSubviewToFront:self.title];
-//    }
-    
-    if(self.shadowAdded == 0)
-    {
-        //image = [self colorizeImage:image withColor:[UIColor grayColor]];
-        //image = [self applyGradientOnImage:image withStartColor:[UIColor lightGrayColor] endColor:[UIColor darkGrayColor]];
-        //image = [self changeImage:image withStartColor:[UIColor darkGrayColor] withEndColor:[UIColor whiteColor]];
-        //self.backgroundImage.image = image;
-        //self.shadowAdded = 1;
-    }
-    
-//    if(self.shadowAdded == 0)
-//    {
-//        [self addGradientToView:self.contentView];
-//    }
+    [UIView transitionWithView:self.backgroundImage duration:.3f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        self.backgroundImage.image = image;
+    }completion:nil];
 }
 
 -(void)updateTitleColor:(UIColor *)color
