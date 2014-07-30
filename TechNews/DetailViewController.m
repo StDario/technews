@@ -187,7 +187,7 @@ int margins;
     screenSize = self.view.frame.size;
     scrollHeight = 500;
     margins = 20;
-    nextY = 0;
+    nextY = -40;
     int titleHeight = 200;
     int authorHeight = 20;
     int authorWidht = 300;
@@ -238,6 +238,9 @@ int margins;
     scrollHeight += dateHeight;
     nextY += dateHeight;
     
+    nextY += 10;
+    scrollHeight += 10;
+    
     UIButton *btnTwitter = [[UIButton alloc] initWithFrame:CGRectMake(screenSize.width - margins - 2 * socialButtonWidth - 10, nextY, socialButtonWidth, socialButtonHeight)];
     UIButton *btnFacebook = [[UIButton alloc] initWithFrame:CGRectMake(screenSize.width - margins - socialButtonWidth, nextY, socialButtonWidth, socialButtonHeight)];
     
@@ -245,6 +248,9 @@ int margins;
     
     scrollHeight += socialButtonHeight;
     nextY += socialButtonHeight;
+    
+    nextY += 10;
+    scrollHeight += 10;
     
     CGSize maximumLabelSize = CGSizeMake((screenSize.width - margins) / 2, FLT_MAX);
     
@@ -259,6 +265,7 @@ int margins;
     int imagesAdded = content.images.count;
     int nextYFirstColumn = nextY;
     int nextYSecondColumn = nextY;
+    int skipCharTo = 0;
     
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 50, screenSize.width, screenSize.height)];
     scrollView.backgroundColor = [UIColor whiteColor];
@@ -281,12 +288,34 @@ int margins;
             NSRange fileRange;
             if(nextText * charsPerSection + charsPerSection > textLength)
             {
-                fileRange = NSMakeRange(nextText * charsPerSection, textLength - nextText * charsPerSection);
+                fileRange = NSMakeRange(nextText * charsPerSection + skipCharTo, textLength - nextText * charsPerSection - skipCharTo);
             }
             else {
-                fileRange = NSMakeRange(nextText * charsPerSection, charsPerSection);
+                
+                int prevSkip = skipCharTo;
+                NSRange nextFileRange;
+                
+                if((nextText + 1) * charsPerSection + charsPerSection > textLength)
+                {
+                    nextFileRange = NSMakeRange((nextText + 1) * charsPerSection + prevSkip, textLength - (nextText + 1) * charsPerSection - prevSkip);
+                }
+                else {
+                    nextFileRange = NSMakeRange((nextText + 1) * charsPerSection + prevSkip, charsPerSection - prevSkip);
+                }
+                
+                NSString *nextT = [content.text substringWithRange:nextFileRange];
+                NSCharacterSet *letters = [NSCharacterSet alphanumericCharacterSet];
+                unichar c = [nextT characterAtIndex:0];
+                if([letters characterIsMember:c]){
+                    NSRange range = [nextT rangeOfString:@" "];
+                    skipCharTo = range.location;
+                }
+                
+                
+                fileRange = NSMakeRange(nextText * charsPerSection + prevSkip, charsPerSection + skipCharTo - prevSkip);
             }
-            NSString *text = [content.text substringWithRange: fileRange];
+            NSString *text = [[content.text substringWithRange: fileRange] stringByTrimmingCharactersInSet:
+                              [NSCharacterSet whitespaceCharacterSet]];
             
             CGSize t = [text boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin
                                        attributes:@{
@@ -389,10 +418,10 @@ int margins;
         NSString *urlStr = [videoUrl stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
         NSURL *url = [NSURL URLWithString:urlStr];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, nextY, screenSize.width - margins, 300)];
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, nextY, screenSize.width - margins, 400)];
         [webView loadRequest:request];
-        scrollHeight += 300;
-        nextY += 300;
+        scrollHeight += 400;
+        nextY += 400;
         scrollView.contentSize = CGSizeMake(screenSize.width, scrollHeight);
         [scrollView addSubview:webView];
     }
@@ -482,6 +511,9 @@ int margins;
     scrollHeight += dateHeight;
     nextY += dateHeight;
     
+    nextY += 10;
+    scrollHeight += 10;
+    
     UIButton *btnTwitter = [[UIButton alloc] initWithFrame:CGRectMake(screenSize.width - margins - 2 * socialButtonWidth - 10, nextY, socialButtonWidth, socialButtonHeight)];
     UIButton *btnFacebook = [[UIButton alloc] initWithFrame:CGRectMake(screenSize.width - margins - socialButtonWidth, nextY, socialButtonWidth, socialButtonHeight)];
     
@@ -489,6 +521,9 @@ int margins;
     
     scrollHeight += socialButtonHeight;
     nextY += socialButtonHeight;
+    
+    nextY += 10;
+    scrollHeight += 10;
     
     CGSize maximumLabelSize = CGSizeMake(screenSize.width - margins, FLT_MAX);
     
@@ -499,7 +534,7 @@ int margins;
     int textAdded = textLength / charsPerSection + 1;
     //int videosAdded = content.videos.count;
     int imagesAdded = content.images.count;
-    
+    int skipCharTo = 0;
     
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 70, screenSize.width, screenSize.height)];
     scrollView.backgroundColor = [UIColor whiteColor];
@@ -518,12 +553,36 @@ int margins;
             NSRange fileRange;
             if(nextText * charsPerSection + charsPerSection > textLength)
             {
-                fileRange = NSMakeRange(nextText * charsPerSection, textLength - nextText * charsPerSection);
+                fileRange = NSMakeRange(nextText * charsPerSection + skipCharTo, textLength - nextText * charsPerSection - skipCharTo);
             }
             else {
-                fileRange = NSMakeRange(nextText * charsPerSection, charsPerSection);
+                
+                int prevSkip = skipCharTo;
+                NSRange nextFileRange;
+                
+                if((nextText + 1) * charsPerSection + charsPerSection > textLength)
+                {
+                    nextFileRange = NSMakeRange((nextText + 1) * charsPerSection + prevSkip, textLength - (nextText + 1) * charsPerSection - prevSkip);
+                }
+                else {
+                    nextFileRange = NSMakeRange((nextText + 1) * charsPerSection + prevSkip, charsPerSection - prevSkip);
+                }
+                
+                NSString *nextT = [content.text substringWithRange:nextFileRange];
+                NSCharacterSet *letters = [NSCharacterSet alphanumericCharacterSet];
+                unichar c = [nextT characterAtIndex:0];
+                if([letters characterIsMember:c]){
+                    NSRange range = [nextT rangeOfString:@" "];
+                    skipCharTo = range.location;
+                }
+                
+                
+                fileRange = NSMakeRange(nextText * charsPerSection + prevSkip, charsPerSection + skipCharTo - prevSkip);
             }
-            NSString *text = [content.text substringWithRange: fileRange];
+            
+            
+            NSString *text = [[content.text substringWithRange: fileRange] stringByTrimmingCharactersInSet:
+                              [NSCharacterSet whitespaceCharacterSet]];
             
             CGSize t = [text boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin
                                        attributes:@{
@@ -670,7 +729,7 @@ int margins;
         
         // 4
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Article Content"
-                                                            message:[error localizedDescription]
+                                                            message:@"Don't worry, we're working on it"
                                                            delegate:nil
                                                   cancelButtonTitle:@"Ok"
                                                   otherButtonTitles:nil];
