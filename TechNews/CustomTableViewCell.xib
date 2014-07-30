@@ -43,6 +43,13 @@
                                 <rect key="frame" x="0.0" y="208" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Xx-N8-7wI">
+                                <rect key="frame" x="40" y="216" width="191" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -52,6 +59,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="backgroundImage" destination="SDD-dq-SdA" id="sef-F2-iaw"/>
+                <outlet property="concept" destination="9Xx-N8-7wI" id="XhP-gV-E3T"/>
                 <outlet property="content" destination="91P-vN-vcY" id="ZR5-oz-0xk"/>
                 <outlet property="imageLoader" destination="wB1-mH-Gib" id="nFq-UR-yDR"/>
                 <outlet property="sourceImage" destination="0W0-KO-8yM" id="3ar-IL-dW9"/>

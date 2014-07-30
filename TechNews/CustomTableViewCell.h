@@ -18,6 +18,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *timeAgo;
 @property (nonatomic, readwrite) int shadowAdded;
 @property (nonatomic, weak) IBOutlet UIImageView *sourceImage;
+@property (nonatomic, weak) IBOutlet UILabel *concept;
 
 - (void)initCell;
 - (void)clearCell;

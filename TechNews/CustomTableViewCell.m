@@ -274,6 +274,8 @@ double secondsInAnMinute = 60;
     [self downloadPicture:article.sourceImage forImageView:self.sourceImage];
     
     self.title.text = article.title;
+    if(![article.concept isEqualToString:@"0"])
+        self.concept.text = [NSString stringWithFormat:@"#%@", article.concept ];
     NSDate *now = [NSDate date];
     
     NSTimeInterval distance = [now timeIntervalSinceDate:article.publishDate];

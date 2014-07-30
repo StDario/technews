@@ -99,7 +99,7 @@ int margins;
 - (void)configureView
 {
     // Update the user interface for the detail item.
-    
+    self.navigationController.navigationBar.tintColor = [self colorFromHexString:@"#FFFFFF"];
     [self setCustomProgressView];
     
     [self downloadNewsArticleContent];

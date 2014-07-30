@@ -75,9 +75,6 @@ int articlesPerDownload = 12;
                                                 [defaults setObject:facebookAccount.username forKey:@"facebookUsername"];
                                                 
                                             }else{
-                                                // ouch
-                                                NSLog(@"Fail");
-                                                NSLog(@"Error: %@", error);
                                             }
                                         }];
 }
@@ -94,8 +91,6 @@ int articlesPerDownload = 12;
             
             if ([accountsArray count] > 0) {
                 ACAccount *twitterAccount = [accountsArray objectAtIndex:0];
-                NSLog(@"%@",twitterAccount.username);
-                NSLog(@"%@",twitterAccount.accountType);
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setObject:twitterAccount.username forKey:@"twitterUsername"];
             }
@@ -160,16 +155,18 @@ int articlesPerDownload = 12;
     _objects = [[NSMutableArray alloc] init];
     self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
     self.collectionView.backgroundColor = [self colorFromHexString:@"#CACED9"];
-    if(!showingSavedArticles)
-        [self downloadNewsArticles:1];
+    
     
     //[SavedArticlesHelper removeAllArticles];
     
     [self loadFacebookAccount];
-    //[self loadTwitterAccount];
+    [self loadTwitterAccount];
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:refreshControl];
+    
+    if(!showingSavedArticles)
+        [self downloadNewsArticles:1];
     
     page = 1;
 }
@@ -183,6 +180,7 @@ int articlesPerDownload = 12;
         [_objects addObject:newsArticle];
     }
 
+    NSLog([NSString stringWithFormat:@"%i", _objects.count]);
     [self.collectionView reloadData];
 }
 
@@ -196,15 +194,24 @@ int articlesPerDownload = 12;
 
 - (void)downloadNewsArticles:(int)pageNum
 {
-    NSString *device = nil;
-    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-        device = @"phone";
-    else
-        device = @"pad";
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *twitterUsername;
+    NSString *facebookUsername;
     
-    NSString *urlString = [NSString stringWithFormat:@"%@%i&device=%@", DownloadUrlString, pageNum, device];
+    if([defaults objectForKey:@"twitterUsername"] != nil)
+        twitterUsername = [defaults objectForKey:@"twitterUsername"];
+    else
+        twitterUsername = @"";
+    
+    if([defaults objectForKey:@"facebookUsername"] != nil)
+        facebookUsername = [defaults objectForKey:@"facebookUsername"];
+    else
+        facebookUsername = @"";
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@%i&twitterUsername=%@&facebookUsername=%@", DownloadUrlString, pageNum, twitterUsername, facebookUsername];
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSLog(urlString);
     
     // 2
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
