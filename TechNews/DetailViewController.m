@@ -19,6 +19,7 @@
 
 static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/fetchArticleHtml.php?";
 static NSString * const DownloadContentUrlString = @"http://skopjeparking.byethost7.com/NewsContent.php?";
+static NSString * const UpdateUserProfileUrlString = @"http://skopjeparking.byethost7.com/updateUserProfile.php?";
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
 typedef enum ScrollDirection {
@@ -98,13 +99,38 @@ int margins;
 - (void)configureView
 {
     // Update the user interface for the detail item.
-
     
     [self setCustomProgressView];
     
     [self downloadNewsArticleContent];
+    [self updateUserProfile];
     
     [self setNavigationBarButtonRight];
+}
+
+-(void)updateUserProfile
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *facebookUsername = [defaults objectForKey:@"facebookUsername"];
+    NSString *twitterUsername = [defaults objectForKey:@"twitterUsername"];
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@textEntryId=%@&twitterUsername=%@&facebookUsername=%@", UpdateUserProfileUrlString, _newsArticle.textEntryId, twitterUsername, facebookUsername];
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    operation.responseSerializer = [AFJSONResponseSerializer serializer];
+    operation.responseSerializer.acceptableContentTypes = [operation.responseSerializer.acceptableContentTypes setByAddingObject:@"text/html"];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    
+    // 5
+    [operation start];
 }
 
 -(void)addFillToProgress

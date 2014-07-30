@@ -31,13 +31,26 @@ static NSString *const kTags = @"tags";
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     if([self.sourceName isEqualToString:@"The Verge"]){
-        [dateFormat setDateFormat:@"yyyy-LL-dTHH:mm:ss Z"];
+        dateString = [self modifyDate:dateString];
+        [dateFormat setDateFormat:@"yyyy-L-d HH:mm:ss"];
     }
     else {
         [dateFormat setDateFormat:@"EE, d LLLL yyyy HH:mm:ss Z"];
     }
     
     self.publishDate = [dateFormat dateFromString: dateString];
+}
+
+-(NSString *)modifyDate:(NSString *)date
+{
+    NSRange range;
+    range.location = 0;
+    range.length = 10;
+    NSString *temp = [date substringWithRange:range];
+    range.location = 11;
+    range.length = 8;
+    NSString *temp2 = [date substringWithRange:range];
+    return [NSString stringWithFormat:@"%@ %@", temp, temp2 ];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder{
