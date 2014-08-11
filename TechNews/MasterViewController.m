@@ -125,6 +125,12 @@ int articlesPerDownload = 12;
     [super viewDidLoad];
     [self showBarButtonRight];
 
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+    {
+//        self.collectionView.frame = CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height);
+//        self.view.backgroundColor = [self colorFromHexString:@"#CACED9"];
+    }
+    
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     [self.collectionView registerNib:[UINib nibWithNibName:@"CustomTableViewCell" bundle: nil] forCellWithReuseIdentifier:@"Cell"];
     _objects = [[NSMutableArray alloc] init];
@@ -137,10 +143,33 @@ int articlesPerDownload = 12;
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:refreshControl];
     
+    
+    
+    
+    
     if(!showingSavedArticles)
         [self downloadNewsArticles:1];
     
     page = 1;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)
+    {
+        if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))
+        {
+            return UIEdgeInsetsMake(0, 20, 0, 20);
+        }
+        else
+        {
+            return UIEdgeInsetsMake(0, 30, 0, 30);
+        }
+    }
+    else
+    {
+        return UIEdgeInsetsMake(0, 0, 0, 0);
+    }
 }
 
 -(void)handleResponse:(NSArray *)articles
@@ -250,6 +279,13 @@ int articlesPerDownload = 12;
     return YES;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CustomTableViewCell *oldCell = (CustomTableViewCell *)cell;
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"placeholder" ofType: @"png"];
+    [oldCell updateImage:[[UIImage alloc] initWithContentsOfFile: path]];
+    [oldCell updateTitleColor:[UIColor blackColor]];
+}
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
