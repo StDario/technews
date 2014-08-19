@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE0AB1DF19A3989E001D25D9 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = BE0AB1DE19A3989E001D25D9 /* NSString+HTML.m */; };
+		BE0AB1E219A398C1001D25D9 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = BE0AB1E119A398C1001D25D9 /* GTMNSString+HTML.m */; };
 		BE2562911989A89900344A97 /* ImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BE2562901989A89900344A97 /* ImageHelper.m */; };
 		BE6D8D25196B0CA100B19C02 /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE6D8D24196B0CA100B19C02 /* CustomTableViewCell.xib */; };
 		BE6D8D28196B0E2800B19C02 /* CustomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6D8D27196B0E2800B19C02 /* CustomTableViewCell.m */; };
@@ -56,6 +58,10 @@
 /* Begin PBXFileReference section */
 		549C8E7583A541E5923B31FC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC2C53DFA70743E2BC82F710 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		BE0AB1DD19A3989E001D25D9 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
+		BE0AB1DE19A3989E001D25D9 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
+		BE0AB1E019A398C1001D25D9 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		BE0AB1E119A398C1001D25D9 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
 		BE25628F1989A89900344A97 /* ImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageHelper.h; sourceTree = "<group>"; };
 		BE2562901989A89900344A97 /* ImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageHelper.m; sourceTree = "<group>"; };
 		BE6D8D24196B0CA100B19C02 /* CustomTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomTableViewCell.xib; sourceTree = "<group>"; };
@@ -249,6 +255,10 @@
 		BE7F4DEF1969D3DC007DDDF3 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				BE0AB1E019A398C1001D25D9 /* GTMNSString+HTML.h */,
+				BE0AB1E119A398C1001D25D9 /* GTMNSString+HTML.m */,
+				BE0AB1DD19A3989E001D25D9 /* NSString+HTML.h */,
+				BE0AB1DE19A3989E001D25D9 /* NSString+HTML.m */,
 				BE6D8D29196B11B600B19C02 /* ImageCache.h */,
 				BE6D8D2A196B11B600B19C02 /* ImageCache.m */,
 				BE75F224197D43B600C01691 /* SavedArticlesHelper.h */,
@@ -423,7 +433,9 @@
 				BE7F4DEE1969D10A007DDDF3 /* NewsArticle.m in Sources */,
 				BE7F4DCC1969C42B007DDDF3 /* DetailViewController.m in Sources */,
 				BE6D8D2B196B11B600B19C02 /* ImageCache.m in Sources */,
+				BE0AB1DF19A3989E001D25D9 /* NSString+HTML.m in Sources */,
 				BEBC16331987D12B00BAA98A /* UAProgressView.m in Sources */,
+				BE0AB1E219A398C1001D25D9 /* GTMNSString+HTML.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

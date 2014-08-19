@@ -137,7 +137,7 @@ int articlesPerDownload = 12;
     self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];
     self.collectionView.backgroundColor = [self colorFromHexString:@"#CACED9"];
     
-    [self loadFacebookAccount];
+    //[self loadFacebookAccount];
     [self loadTwitterAccount];
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];

@@ -7,6 +7,7 @@
 //
 
 #import "NewsContent.h"
+#import "NSString+HTML.h"
 
 @implementation NewsContent
 
@@ -19,6 +20,12 @@ static NSString *const kVideos = @"videos";
     for (NSString *key in [dict allKeys]) {
         [self setValue:dict[key] forKey:key];
     }
+    
+    self.text = [self.text stringByDecodingHTMLEntities];
+    self.text = [self.text stringByReplacingOccurrencesOfString:@"â€™" withString:@"'"];
+    self.text = [self.text stringByReplacingOccurrencesOfString:@"â€œ" withString:@"\""];
+    self.text = [self.text stringByReplacingOccurrencesOfString:@"â€" withString:@"\""];
+    self.text = [self.text stringByReplacingOccurrencesOfString:@"Ã©" withString:@"é"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder{

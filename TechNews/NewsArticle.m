@@ -7,6 +7,7 @@
 //
 
 #import "NewsArticle.h"
+#import "NSString+HTML.h"
 
 @implementation NewsArticle
 
@@ -39,6 +40,11 @@ static NSString *const kTags = @"tags";
     }
     
     self.publishDate = [dateFormat dateFromString: dateString];
+    self.title = [self.title stringByDecodingHTMLEntities];
+    self.title = [self.title stringByReplacingOccurrencesOfString:@"â€™" withString:@"'"];
+    self.title = [self.title stringByReplacingOccurrencesOfString:@"â€œ" withString:@"\""];
+    self.title = [self.title stringByReplacingOccurrencesOfString:@"â€" withString:@"\""];
+    self.title = [self.title stringByReplacingOccurrencesOfString:@"Ã©" withString:@"é"];
 }
 
 -(NSString *)modifyDate:(NSString *)date
