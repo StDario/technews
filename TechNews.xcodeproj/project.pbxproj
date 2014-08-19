@@ -39,7 +39,7 @@
 		BEAFFFF91972BFB40026D2E3 /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAFFFF51972BFB40026D2E3 /* twitter.png */; };
 		BEAFFFFB1972BFB40026D2E3 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = BEAFFFF71972BFB40026D2E3 /* facebook.png */; };
 		BEBC16331987D12B00BAA98A /* UAProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEBC16321987D12B00BAA98A /* UAProgressView.m */; };
-		BEEC5A6E19748F4F0071305D /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = BEEC5A6D19748F4F0071305D /* placeholder.png */; };
+		BEE0A03819A38F7D002E3F22 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = BEE0A03719A38F7D002E3F22 /* placeholder.png */; };
 		E3F1E1CDA23341D2B6D101CB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 549C8E7583A541E5923B31FC /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -101,7 +101,7 @@
 		BEAFFFF71972BFB40026D2E3 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		BEBC16311987D12B00BAA98A /* UAProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAProgressView.h; sourceTree = "<group>"; };
 		BEBC16321987D12B00BAA98A /* UAProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UAProgressView.m; sourceTree = "<group>"; };
-		BEEC5A6D19748F4F0071305D /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
+		BEE0A03719A38F7D002E3F22 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -262,13 +262,13 @@
 		BE949F7A197C2141001BC2D6 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				BEE0A03719A38F7D002E3F22 /* placeholder.png */,
 				BE75F222197D37DA00C01691 /* plus-32.png */,
 				BE75F220197D351A00C01691 /* plus-50.png */,
 				BEAFFFF51972BFB40026D2E3 /* twitter.png */,
 				BEAFFFF71972BFB40026D2E3 /* facebook.png */,
 				BEAF00091972C6130026D2E3 /* twitter-background 2.png */,
 				BEAF000A1972C6130026D2E3 /* facebook-background 2.png */,
-				BEEC5A6D19748F4F0071305D /* placeholder.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -351,9 +351,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEAFFFF91972BFB40026D2E3 /* twitter.png in Resources */,
+				BEE0A03819A38F7D002E3F22 /* placeholder.png in Resources */,
 				BE75F223197D37DA00C01691 /* plus-32.png in Resources */,
 				BE7F4DC61969C42B007DDDF3 /* Main_iPad.storyboard in Resources */,
-				BEEC5A6E19748F4F0071305D /* placeholder.png in Resources */,
 				BE7F4DCE1969C42B007DDDF3 /* Images.xcassets in Resources */,
 				BEAFFFFB1972BFB40026D2E3 /* facebook.png in Resources */,
 				BE6D8D25196B0CA100B19C02 /* CustomTableViewCell.xib in Resources */,

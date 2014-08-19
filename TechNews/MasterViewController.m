@@ -146,7 +146,6 @@ int articlesPerDownload = 12;
     
     
     
-    
     if(!showingSavedArticles)
         [self downloadNewsArticles:1];
     
@@ -170,6 +169,20 @@ int articlesPerDownload = 12;
     {
         return UIEdgeInsetsMake(0, 0, 0, 0);
     }
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone || ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad && UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))){
+        return 0;
+    }
+    return 10.0;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone || ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad && UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation))){
+        return 0;
+    }
+    return 10.0;
 }
 
 -(void)handleResponse:(NSArray *)articles
@@ -268,6 +281,7 @@ int articlesPerDownload = 12;
         [self downloadNewsArticles:1];
     }
     
+    [self.collectionView reloadData];
     page = 1;
     
 }

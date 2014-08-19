@@ -708,7 +708,7 @@ int margins;
         // 4
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Article Content"
                                                             message:@"Don't worry, we're working on it"
-                                                           delegate:nil
+                                                           delegate:self
                                                   cancelButtonTitle:@"Ok"
                                                   otherButtonTitles:nil];
         [alertView show];
@@ -716,6 +716,14 @@ int margins;
     
     // 5
     [operation start];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 -(void)saveArticle
@@ -842,49 +850,49 @@ int margins;
 
 - (IBAction)shareOnFacebook:(id)sender;
 {
-//    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
-//    {
-//        SLComposeViewController *facebookSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-//        
-//        NSString *initialText = _newsArticle.link;
-//        
-//        [facebookSheet setInitialText: initialText];
-//        [self presentViewController:facebookSheet animated:YES completion:nil];
-//    }
-//    else
-//    {
-//        UIAlertView *alertView = [[UIAlertView alloc]
-//                                  initWithTitle:@"Sorry"
-//                                  message:@"You can't share on facebook right now, make sure your device has an internet connection and you have at least one Twitter account setup"
-//                                  delegate:self
-//                                  cancelButtonTitle:@"OK"
-//                                  otherButtonTitles:nil];
-//        [alertView show];
-//    }
+    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
+    {
+        SLComposeViewController *facebookSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+        
+        NSString *initialText = _newsArticle.link;
+        
+        [facebookSheet setInitialText: initialText];
+        [self presentViewController:facebookSheet animated:YES completion:nil];
+    }
+    else
+    {
+        UIAlertView *alertView = [[UIAlertView alloc]
+                                  initWithTitle:@"Sorry"
+                                  message:@"You can't share on facebook right now, make sure your device has an internet connection and you have at least one Twitter account setup"
+                                  delegate:self
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil];
+        [alertView show];
+    }
 }
 
 
 - (IBAction)shareOnTwitter:(id)sender;
 {
-//    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
-//    {
-//        SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-//        
-//        NSString *initialText = _newsArticle.link;
-//        
-//        [tweetSheet setInitialText: initialText];
-//        [self presentViewController:tweetSheet animated:YES completion:nil];
-//    }
-//    else
-//    {
-//        UIAlertView *alertView = [[UIAlertView alloc]
-//                                  initWithTitle:@"Sorry"
-//                                  message:@"You can't send a tweet right now, make sure your device has an internet connection and you have at least one Twitter account setup"
-//                                  delegate:self
-//                                  cancelButtonTitle:@"OK"
-//                                  otherButtonTitles:nil];
-//        [alertView show];
-//    }
+    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
+    {
+        SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+        
+        NSString *initialText = _newsArticle.link;
+        
+        [tweetSheet setInitialText: initialText];
+        [self presentViewController:tweetSheet animated:YES completion:nil];
+    }
+    else
+    {
+        UIAlertView *alertView = [[UIAlertView alloc]
+                                  initWithTitle:@"Sorry"
+                                  message:@"You can't send a tweet right now, make sure your device has an internet connection and you have at least one Twitter account setup"
+                                  delegate:self
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil];
+        [alertView show];
+    }
 }
 
 - (UIColor *)colorFromHexString:(NSString *)hexString {
