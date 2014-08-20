@@ -14,9 +14,10 @@
 #import "ImageHelper.h"
 
 @interface DetailViewController ()
-@property (strong, nonatomic) UIPopoverController *masterPopoverController;
 - (void)configureView;
 @end
+
+
 
 static NSString * const DownloadUrlString = @"http://skopjeparking.byethost7.com/fetchArticleHtml.php?";
 static NSString * const DownloadContentUrlString = @"http://skopjeparking.byethost7.com/NewsContent.php?";
@@ -34,14 +35,33 @@ typedef enum ScrollDirection {
 
 @implementation DetailViewController
 
-bool flag = false;
 UIScrollView *scrollView;
-int nextY;
+bool flag;
 CGSize screenSize;
 int scrollHeight;
 int margins;
+int nextY;
 
 #pragma mark - Managing the detail item
+
+- (void)viewDidLoad
+{
+    if(flag == false)
+        flag = true;
+    else
+        return;
+    
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+    //[self configureView];
+    self.navigationController.navigationBar.tintColor = [self colorFromHexString:@"#FFFFFF"];
+    
+    UISwipeGestureRecognizer *mSwipeUpRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showMaster)];
+    
+    [mSwipeUpRecognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
+    
+    [[self view] addGestureRecognizer:mSwipeUpRecognizer];
+}
 
 - (void)setNewsArticle:(id)newDetailItem
 {
@@ -52,9 +72,9 @@ int margins;
         [self configureView];
     }
 
-    if (self.masterPopoverController != nil) {
-        [self.masterPopoverController dismissPopoverAnimated:YES];
-    }        
+//    if (self.masterPopoverController != nil) {
+//        [self.masterPopoverController dismissPopoverAnimated:YES];
+//    }        
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -90,6 +110,7 @@ int margins;
 - (void)configureView
 {
     // Update the user interface for the detail item.
+    
     self.navigationController.navigationBar.tintColor = [self colorFromHexString:@"#FFFFFF"];
     [self setCustomProgressView];
     
@@ -97,6 +118,7 @@ int margins;
     [self updateUserProfile];
     
     [self setNavigationBarButtonRight];
+    
 }
 
 -(void)updateUserProfile
@@ -162,7 +184,7 @@ int margins;
     progress.borderWidth = 1.0;
     progress.lineWidth = 1.0;
     
-    [NSTimer scheduledTimerWithTimeInterval: 2 target: self
+    self.timer = [NSTimer scheduledTimerWithTimeInterval: 2 target: self
                                    selector: @selector(addFillToProgress) userInfo: nil repeats: YES];
     
     [scrollView addSubview:progress];
@@ -419,7 +441,7 @@ int margins;
         [scrollView addSubview:webView];
     }
     
-    
+    [self.timer invalidate];
     [self.view addSubview:scrollView];
 }
 
@@ -623,6 +645,7 @@ int margins;
         NSURL *url = [NSURL URLWithString:urlStr];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, nextY, screenSize.width - margins, 300)];
+        webView.frame = CGRectMake(0, nextY, screenSize.width - margins, 300);
         [webView loadRequest:request];
         scrollHeight += 300;
         nextY += 300;
@@ -630,7 +653,7 @@ int margins;
         [scrollView addSubview:webView];
     }
     
-    
+    [self.timer invalidate];
     [self.view addSubview:scrollView];
     
 }
@@ -803,24 +826,7 @@ int margins;
         self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"#6DCF13"];
 }
 
-- (void)viewDidLoad
-{
-    if(flag == false)
-        flag = true;
-    else
-        return;
-    
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    [self configureView];
-    self.navigationController.navigationBar.tintColor = [self colorFromHexString:@"#FFFFFF"];
-    
-    UISwipeGestureRecognizer *mSwipeUpRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showMaster)];
-    
-    [mSwipeUpRecognizer setDirection:(UISwipeGestureRecognizerDirectionRight)];
-    
-    [[self view] addGestureRecognizer:mSwipeUpRecognizer];
-}
+
 
 -(void)showMaster
 {
@@ -895,6 +901,17 @@ int margins;
     }
 }
 
+
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    _newsArticle = nil;
+    //scrollView = nil;
+    //self.view = nil;
+    self.timer = nil;
+    self.progressView = nil;
+}
+
 - (UIColor *)colorFromHexString:(NSString *)hexString {
     unsigned rgbValue = 0;
     NSScanner *scanner = [NSScanner scannerWithString:hexString];
@@ -909,20 +926,24 @@ int margins;
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    NSArray *viewsToRemove = [scrollView subviews];
+    for (UIView *v in viewsToRemove) {
+        if([v isKindOfClass:[UIWebView class]]){
+            UIWebView *web = (UIWebView *)v;
+            [web loadHTMLString:@"" baseURL:nil];
+            [web stopLoading];
+            web.delegate = nil;
+            [web removeFromSuperview];
+        }
+    }
+    
+    scrollView = nil;
+    self.view = nil;
+}
+
 #pragma mark - Split view
 
-- (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
-{
-    barButtonItem.title = NSLocalizedString(@"Master", @"Master");
-    [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
-    self.masterPopoverController = popoverController;
-}
-
-- (void)splitViewController:(UISplitViewController *)splitController willShowViewController:(UIViewController *)viewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
-{
-    // Called when the view is shown again in the split view, invalidating the button and popover controller.
-    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
-    self.masterPopoverController = nil;
-}
 
 @end

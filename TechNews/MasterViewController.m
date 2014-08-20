@@ -120,6 +120,13 @@ int articlesPerDownload = 12;
     self.navigationItem.rightBarButtonItem = saved;
 }
 
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+        [self.collectionView.collectionViewLayout invalidateLayout];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -131,7 +138,7 @@ int articlesPerDownload = 12;
 //        self.view.backgroundColor = [self colorFromHexString:@"#CACED9"];
     }
     
-    self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    //self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     [self.collectionView registerNib:[UINib nibWithNibName:@"CustomTableViewCell" bundle: nil] forCellWithReuseIdentifier:@"Cell"];
     _objects = [[NSMutableArray alloc] init];
     self.navigationController.navigationBar.barTintColor = [self colorFromHexString:@"5EC4DB"];

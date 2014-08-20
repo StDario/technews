@@ -10,37 +10,19 @@
 #import "NewsArticle.h"
 #import "UAProgressView.h"
 
-@interface DetailViewController : UIViewController <UISplitViewControllerDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
+@interface DetailViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) NewsArticle *newsArticle;
-
-@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
-
-@property (weak, nonatomic) IBOutlet UITextView *articleContent;
-
-@property (weak, nonatomic) IBOutlet UILabel *sourceName;
-
-@property (weak, nonatomic) IBOutlet UIImageView *sourceImage;
-
-@property (weak, nonatomic) IBOutlet UILabel *publishDate;
-
-@property (weak, nonatomic) IBOutlet UILabel *author;
-
-@property (weak, nonatomic) IBOutlet UILabel *articleTitle;
-
-@property (weak, nonatomic) IBOutlet UIImageView *articleImage;
-
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @property (weak, nonatomic) IBOutlet UIButton *btnTwitter;
 
 @property (weak, nonatomic) IBOutlet UIButton *btnFacebook;
 
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-
 @property (nonatomic, assign) CGFloat lastContentOffset;
 
 @property (nonatomic, weak) IBOutlet UAProgressView *progressView;
+
+@property (nonatomic, weak) NSTimer *timer;
 
 - (IBAction)shareOnFacebook:(id)sender;
 
